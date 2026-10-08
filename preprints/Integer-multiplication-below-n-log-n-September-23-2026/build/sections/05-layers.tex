@@ -548,9 +548,9 @@ Put
        \lceil\log_m(2d)\rceil,
  \qquad k_0=\lceil\log_m d\rceil.
 \]
-If \(D\le q_0\), use individual \(C\) kernels, at cost \(O(V\log d)\).
+If \(D\le q_0\), use individual \(C\) kernels, at cost \(O(V\log(2d))\).
 Otherwise apply \(C\) individually on the selected bits of the first
-\(q_0\) chunks, in \(O(V\log d)\) time.  These chunks remain a
+\(q_0\) chunks, in \(O(V\log(2d))\) time.  These chunks remain a
 complete consecutive address block before all the remaining chunks;
 regard their concatenated bits as one row index.  Its range has
 length \(R_{\rm row}=2^{q_0K}\ge W^{k_0}\), since \(K\ge1\) for sufficiently

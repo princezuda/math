@@ -1,0 +1,14 @@
+{
+  "challenge_module": "ComparatorChallenges.IntegerMultiplicationArithmeticSupport",
+  "definition_names": [],
+  "enable_nanoda": false,
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "solution_module": "OAI.Computability.IntegerMultiplication.Main",
+  "theorem_names": [
+    "OAI.IntegerMultiplication.paper_arithmetic"
+  ]
+}

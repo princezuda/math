@@ -2692,7 +2692,7 @@ We prove that the complex border determinantal complexity of the $`m\times m`$ p
 <tbody><tr>
 <td>
 
-**109. Integer multiplication below $`n\log n`$.** Multiplies two <i>n</i>-bit integers exactly at every input length in deterministic worst-case time $`O(n(\log n)^{1-\kappa})`$, with $`\kappa=2^{-182}`$, on one fixed finite-alphabet Turing machine with finitely many one-dimensional tapes. This disproves the Schönhage–Strassen $`n\log n`$ optimality conjecture in the ordinary multitape bit model.
+**109. Integer multiplication below $`n\log n`$.** Multiplies two <i>n</i>-bit integers exactly at every input length in deterministic worst-case time $`O(n(\log n)^{1-\kappa})`$, with $`\kappa=2^{-182}`$, on one fixed finite-alphabet Turing machine with finitely many one-dimensional tapes. This disproves the Schönhage–Strassen $`n\log n`$ optimality conjecture in the ordinary multitape bit model. ([Lean](lean/docs/109.md))
 
 </td>
 </tr></tbody>

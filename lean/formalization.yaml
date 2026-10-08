@@ -449,6 +449,11 @@ sources:
     id: ../preprints/Independent-products-in-real-L1-asymptotic-midpoint-convexity-without-AUC-renormings-September-27-2026/manuscript.pdf
     type: article
 
+  - title: "Integer multiplication below $n\\log n$"
+    authors: ["OpenAI"]
+    id: ../preprints/Integer-multiplication-below-n-log-n-September-23-2026/paper.pdf
+    type: article
+
   - title: "Integral and fractional expectation thresholds are equivalent"
     authors: ["OpenAI"]
     id: ../preprints/Integral-and-fractional-expectation-thresholds-are-equivalent-September-23-2026/paper.pdf
@@ -1321,6 +1326,10 @@ status:
     - comparator_config: ComparatorChallenges/InfiniteMatroid.json
       declaration: OAI.InfiniteMatroidCounterexample.main
       file: OAI/Combinatorics/InfiniteMatroid/Main.lean
+
+    - comparator_config: ComparatorChallenges/IntegerMultiplicationArithmeticSupport.json
+      declaration: OAI.IntegerMultiplication.paper_arithmetic
+      file: OAI/Computability/IntegerMultiplication/Main.lean
 
     - comparator_config: ComparatorChallenges/IsometricImmersion.json
       declaration: OAI.SmoothLocal.Geometry.exists_local_metric_without_local_immersion

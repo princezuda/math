@@ -157,6 +157,9 @@ work.  Since
 for each fixed $C$, this work is absorbed by the $QB\ge Q$ bits of the
 fiber.  Unrelated spectator counters are incremented by ripple counting;
 their entire contents are not consulted when computing the offset.
+Each of the fixed number of formal fields of the call keeps its counter
+on a separate work tape, so reading the controls at a fiber never
+crosses the counter of an intervening field, however long that field is.
 
 For positive fixed integer $c$ prime to $q$, the permutation
 $y\mapsto cy\pmod Q$ has $c$ increasing pieces, classified by

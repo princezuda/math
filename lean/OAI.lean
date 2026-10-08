@@ -327,6 +327,7 @@ import OAI.Computability.DirectedFeedback.Main
 import OAI.Computability.FourierCircuit.Main
 import OAI.Computability.FourierTransform.Main
 import OAI.Computability.GeneralizedCircuits.Mesh
+import OAI.Computability.IntegerMultiplication.Main
 import OAI.Computability.Logspace.Deterministic
 import OAI.Computability.Logspace.Equality
 import OAI.Computability.LoopMatching.Endpoint

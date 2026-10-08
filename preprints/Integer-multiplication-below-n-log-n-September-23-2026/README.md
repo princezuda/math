@@ -15,3 +15,8 @@
   year = {2026}
 }
 ```
+
+## Audit
+
+An independent audit found no error; it fixes four expository gaps in `build/sections`.
+See [AUDIT.md](AUDIT.md) and the Lean [scope note](../../lean/docs/109.md).

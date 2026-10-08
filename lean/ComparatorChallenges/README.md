@@ -24,5 +24,8 @@ theorems:
   the construction-provider statements required by the original comparison.
 - `HoneycombBridgeMassSupport.json`: finiteness and quarter-power bounds for the
   strict honeycomb bridge mass.
+- `IntegerMultiplicationArithmeticSupport.json`: the exponent certificates of the
+  two finite networks and the margins behind $\kappa=2^{-182}$ in integer
+  multiplication below $n\log n$.
 
 See the [scope notes](../docs/) for per-paper coverage and limitations.
