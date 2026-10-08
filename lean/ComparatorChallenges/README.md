@@ -24,5 +24,11 @@ theorems:
   the construction-provider statements required by the original comparison.
 - `HoneycombBridgeMassSupport.json`: finiteness and quarter-power bounds for the
   strict honeycomb bridge mass.
+- `HodgeCMReductionSupport.json`: the two-row switch chain and Galois scalar
+  descent in the reduction of the rational Hodge conjecture for CM abelian
+  varieties to four-factor switches.
+- `MilneRationalitySupport.json`: the rational pairing transfer, bounded-degree
+  avoidance and the stable largest maximizer used in the proof of Milne's
+  rationality conjecture.
 
 See the [scope notes](../docs/) for per-paper coverage and limitations.

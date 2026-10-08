@@ -13,7 +13,7 @@ Each result description is followed by its constituent manuscripts and their abs
 <tbody><tr>
 <td>
 
-**001. Milne’s rationality conjecture and algebraic specialization.** Proves Milne's rationality conjecture for abelian varieties over $`\overline{\mathbb Q}`$ with good reduction: specialized Hodge classes pair rationally with complementary divisor products, independently of cohomology theory. Together with result 032, every specialized Hodge class is represented by a single rational algebraic cycle simultaneously in all prime-to-<i>p</i> and crystalline realizations, for every residue characteristic <i>p</i>.
+**001. Milne’s rationality conjecture and algebraic specialization.** Proves Milne's rationality conjecture for abelian varieties over $`\overline{\mathbb Q}`$ with good reduction: specialized Hodge classes pair rationally with complementary divisor products, independently of cohomology theory. Together with result 032, every specialized Hodge class is represented by a single rational algebraic cycle simultaneously in all prime-to-<i>p</i> and crystalline realizations, for every residue characteristic <i>p</i>. ([Lean](lean/docs/001.md))
 
 </td>
 </tr></tbody>
@@ -752,7 +752,7 @@ We prove Uchida's conjecture on open homomorphisms of Galois groups. Every conti
 <tbody><tr>
 <td>
 
-**032. The rational Hodge conjecture for CM abelian varieties.** Proves the rational Hodge conjecture for every complex CM abelian variety, in every dimension and codimension. Through Milne's theorems, this also gives the Tate conjecture for all abelian varieties over finite fields and the Hodge standard conjecture for abelian varieties in every characteristic.
+**032. The rational Hodge conjecture for CM abelian varieties.** Proves the rational Hodge conjecture for every complex CM abelian variety, in every dimension and codimension. Through Milne's theorems, this also gives the Tate conjecture for all abelian varieties over finite fields and the Hodge standard conjecture for abelian varieties in every characteristic. ([Lean](lean/docs/032.md))
 
 </td>
 </tr></tbody>

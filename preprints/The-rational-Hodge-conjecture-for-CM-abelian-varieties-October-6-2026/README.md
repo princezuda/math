@@ -19,3 +19,7 @@
 ## Version note
 
 This version updates citations to revised manuscripts in this collection; see the [previous version](../The-rational-Hodge-conjecture-for-CM-abelian-varieties-September-30-2026/paper.pdf).
+
+## Audit
+
+An independent audit found no fatal or serious gap in the proof of the main theorem. See [AUDIT.md](AUDIT.md) and the Lean [scope note](../../lean/docs/032.md).

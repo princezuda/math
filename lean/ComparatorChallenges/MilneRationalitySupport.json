@@ -1,0 +1,17 @@
+{
+  "challenge_module": "ComparatorChallenges.MilneRationalitySupport",
+  "definition_names": [],
+  "enable_nanoda": false,
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "solution_module": "OAI.AlgebraicGeometry.MilneRationality.Main",
+  "theorem_names": [
+    "OAI.MilneRationality.avoidance",
+    "OAI.MilneRationality.largest_maximizer",
+    "OAI.MilneRationality.maximizer_stable",
+    "OAI.MilneRationality.pairing_transfer"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "challenge_module": "ComparatorChallenges.HodgeCMReductionSupport",
+  "definition_names": [],
+  "enable_nanoda": false,
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "solution_module": "OAI.AlgebraicGeometry.HodgeCM.Main",
+  "theorem_names": [
+    "OAI.HodgeCM.switch_reduction_combinatorics",
+    "OAI.HodgeCM.scalar_descent"
+  ]
+}

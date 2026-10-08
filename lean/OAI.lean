@@ -27,8 +27,10 @@ import OAI.AlgebraicGeometry.AbhyankarSathaye.Counterexample
 import OAI.AlgebraicGeometry.CartierSections
 import OAI.AlgebraicGeometry.CharacterVarieties
 import OAI.AlgebraicGeometry.CommutingDerivations.OrdinaryExtraMain
+import OAI.AlgebraicGeometry.HodgeCM.Main
 import OAI.AlgebraicGeometry.LogKodaira.FiberNegative
 import OAI.AlgebraicGeometry.LogKodaira.RootFactor
+import OAI.AlgebraicGeometry.MilneRationality.Main
 import OAI.AlgebraicGeometry.NumericalDimension.IndexedTransfer
 import OAI.AlgebraicGeometry.NumericalDimension.RelativeNegativity
 import OAI.AlgebraicGeometry.NumericalDimension.TwistedPushforward

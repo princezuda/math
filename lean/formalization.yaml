@@ -489,6 +489,11 @@ sources:
     id: ../preprints/Midpoint-lenses-in-segment-spaces-September-27-2026/manuscript.pdf
     type: article
 
+  - title: "Milne's rationality conjecture for abelian varieties"
+    authors: ["OpenAI"]
+    id: ../preprints/Milnes-rationality-conjecture-for-abelian-varieties-October-7-2026/paper.pdf
+    type: article
+
   - title: "Nagata's conjecture for plane curves"
     authors: ["OpenAI"]
     id: ../preprints/Nagatas-Conjecture-for-Plane-Curves-September-23-2026/main.pdf
@@ -777,6 +782,11 @@ sources:
   - title: "The Quasi-Riemann Hypothesis: A Zero-Free Half-Plane Re(s)>7/8"
     authors: ["OpenAI"]
     id: ../preprints/The-Quasi-Riemann-Hypothesis-September-30-2026/paper.pdf
+    type: article
+
+  - title: "The rational Hodge conjecture for CM abelian varieties"
+    authors: ["OpenAI"]
+    id: ../preprints/The-rational-Hodge-conjecture-for-CM-abelian-varieties-October-6-2026/paper.pdf
     type: article
 
   - title: "The second Kahn–Kalai conjecture"
@@ -1294,6 +1304,14 @@ status:
       declaration: OAI.HenonLaneEmden.main_nonexistence
       file: OAI/Analysis/HenonEmden/Main.lean
 
+    - comparator_config: ComparatorChallenges/HodgeCMReductionSupport.json
+      declaration: OAI.HodgeCM.switch_reduction_combinatorics
+      file: OAI/AlgebraicGeometry/HodgeCM/Main.lean
+
+    - comparator_config: ComparatorChallenges/HodgeCMReductionSupport.json
+      declaration: OAI.HodgeCM.scalar_descent
+      file: OAI/AlgebraicGeometry/HodgeCM/Descent.lean
+
     - comparator_config: ComparatorChallenges/HoneycombBridgeMassSupport.json
       declaration: OAI.CriticalHoneycomb.finiteBridgeMassEstimate
       file: OAI/Combinatorics/HoneycombChords/BridgeMass.lean
@@ -1417,6 +1435,22 @@ status:
     - comparator_config: ComparatorChallenges/MetricEntropyDuality.json
       declaration: OAI.MetricEntropyDuality.exists_entropy_duality_counterexample_with_covers
       file: OAI/Analysis/MetricEntropy/Main.lean
+
+    - comparator_config: ComparatorChallenges/MilneRationalitySupport.json
+      declaration: OAI.MilneRationality.pairing_transfer
+      file: OAI/AlgebraicGeometry/MilneRationality/Transport.lean
+
+    - comparator_config: ComparatorChallenges/MilneRationalitySupport.json
+      declaration: OAI.MilneRationality.avoidance
+      file: OAI/AlgebraicGeometry/MilneRationality/Avoidance.lean
+
+    - comparator_config: ComparatorChallenges/MilneRationalitySupport.json
+      declaration: OAI.MilneRationality.largest_maximizer
+      file: OAI/AlgebraicGeometry/MilneRationality/Filtration.lean
+
+    - comparator_config: ComparatorChallenges/MilneRationalitySupport.json
+      declaration: OAI.MilneRationality.maximizer_stable
+      file: OAI/AlgebraicGeometry/MilneRationality/Filtration.lean
 
     - comparator_config: ComparatorChallenges/MidpointLenses.json
       declaration: OAI.SegmentLenses.midpoint_lens_main
