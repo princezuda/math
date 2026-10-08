@@ -22,4 +22,4 @@ This version updates a citation to a revised manuscript in this collection; see 
 
 ## Audit
 
-An independent audit found no error in any step the paper argues itself. Two load-bearing inputs to the §3 transport could not be verified: a decomposition taken from inside a cited proof, and the p = 2 versions of the cited integral-model results. One citation, to Grothendieck–Messing, is wrong at p = 2, but the paper's alternative route is valid. See [AUDIT.md](AUDIT.md) and the Lean [scope note](../../lean/docs/001.md).
+An independent audit found no error in any step the paper argues itself. Two inputs to the §3 transport were checked against the sources. The decomposition taken from inside Kisin–Zhou's Prop. 2.1.9 holds, and the cited integral-model results are stated for p = 2; the paper should cite the locators. One citation, to Grothendieck–Messing, is wrong at p = 2, but the paper's alternative route is valid. See [AUDIT.md](AUDIT.md) and the Lean [scope note](../../lean/docs/001.md).
