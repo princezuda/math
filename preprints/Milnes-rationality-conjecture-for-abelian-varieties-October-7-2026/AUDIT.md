@@ -137,8 +137,12 @@ Each holds at p = 2, but Kisin–Zhou cite only p > 2 sources for them:
   - If "π0(F)/K" is read as the colimit in totally disconnected spaces, the lemma becomes true, but Prop. 3.12's deduction of transitivity then fails.
 - **No independent proof found.** Gleason's analogue, Gle22 v4 Lemma 3.11(1), is proved only for unramified G with (b, μ) HN-irreducible. It assumes (★), and it uses the known bijection π0(X_μ(b)) ≅ π0(X^ab), which is what GLX set out to prove in general.
 - **Effect on Prop. 3.12.** Its written proof (transitivity of G(ℚ_p) on π0(Sht_∞ × C_p)) uses exactly this step, so as written it is invalid.
-- **The statement is very likely true.** A repair: components of Sht_K × C_p are open (Thm 3.9, with X_μ^K(b) locally noetherian), then use GL22 connectedness. The repair still needs one step (★): for a compact open K, the fibres of π0(Sht_∞) → π0(Sht_K) are K-orbits. Gleason states (★) as Gle22 v4 Lemma 3.11(1) without proof. It is routine when the components are quasi-compact; the general case was not closed here.
-- **So 001's chain has one link whose published proof has a gap:** 001 Cor. 3.4 → Kisin–Zhou Thm 2.2.7 → Thm 2.2.5 = GLX Cor. 6.3 → GLX Prop. 3.12. The gap is in a human-written source, four levels below 001, and very likely repairable.
+- **The statement is very likely true.** A repair: components of Sht_K × C_p are open (Thm 3.9, with X_μ^K(b) locally noetherian), then use GL22 connectedness. The repair still needs one step (★): for a compact open K, the fibres of π0(Sht_∞) → π0(Sht_K) are K-orbits. Gleason states (★) as Gle22 v4 Lemma 3.11(1) without proof. It is routine when the components are quasi-compact.
+- **(★) proved for minuscule μ, not yet refereed: [GLX-STAR.md](GLX-STAR.md).**
+  - The proof uses local connectedness of the finite-level rigid spaces Sht_K, and density of local monodromy, in place of quasi-compactness.
+  - It repairs Prop. 3.12 for minuscule μ, which covers Hodge type and so everything 001 uses.
+  - Non-minuscule μ stays open.
+- **So 001's chain had one link whose published proof has a gap:** 001 Cor. 3.4 → Kisin–Zhou Thm 2.2.7 → Thm 2.2.5 = GLX Cor. 6.3 → GLX Prop. 3.12. The gap is in a human-written source, four levels below 001. [GLX-STAR.md](GLX-STAR.md) closes it for minuscule μ, pending expert review.
 - **GLX Thm 6.2 itself.**
   - §6 checks out. The one omission is that Lemma 6.13 needs G(ℚ_p)/N_x to be discrete; it is, since N_x ⊇ Z(G)(ℚ_p)·G^der_x, which is open. Lemma 6.13's finiteness input (Hamacher–Viehmann Thm 1.2) needs no condition on G.
   - §4: the reduction used for Thm 6.2 is valid. The (2)⇒(3) direction (Prop. 4.11), not used here, has a fixable gap. Def. 4.1 is missing the word "proper". (3.23) is misstated, but its conclusion is true for all G.
@@ -147,7 +151,7 @@ Each holds at p = 2, but Kisin–Zhou cite only p > 2 sources for them:
   - Citation slips: Gle22 Prop. 2.12 is Prop. 1.9 of v2 (or Gle21). Vie24 Thm 5.2 is Prop. 5.1 of v1. PR24 "Lemma 4.1.0.2" is 4.10.2.
 
 **Not re-derived:**
-- the proof of (★) in the non-quasi-compact case, and Anschütz's theorem;
+- (★) for non-minuscule μ, and Anschütz's theorem;
 - Wintenberger Cor. 4.5.3;
 - Kisin–Madapusi Pera–Shin Cor. 1.1.17;
 - Noot's ℓ-independence.
