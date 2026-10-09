@@ -2,7 +2,7 @@
 
 This paper has no Lean formalization. It was read in full twice, by two independent reviewers: the lead auditor, and a separate adversarial check of every section. The load-bearing cited papers were then checked against their sources, because in other audits the gaps sat in cited human papers, not in the paper itself (see the [Milne audit](../Milnes-rationality-conjecture-for-abelian-varieties-October-7-2026/AUDIT.md)).
 
-**Verdict: no error was found in the proof of the inequality ρ_X(ι_X − 1) ≤ n or in the equality case.** One cited theorem, Occhetta 2006, is stated more generally than its proof supports. The paper uses it only in the case where the proof is valid.
+**Verdict: no error was found in the proof of the inequality ρ_X(ι_X − 1) ≤ n or in the equality case.** One cited theorem, Occhetta 2006, is stated more generally than its proof supports. The paper uses it only in the case where the proof is valid. Occhetta's proof also has one unexplained step, a relative-ampleness check in his Step 3. It looks repairable but was not repaired here, and it affects only the equality case.
 
 This is evidence, not a proof. Neither reviewer is a referee in the field, and the result settles a conjecture that has been open since 2003, so expert review is warranted.
 
@@ -44,7 +44,20 @@ The paper works through small quantum cohomology.
   - So Occhetta's Theorem 1.1, as stated for arbitrary subfamilies, rests on a false lemma.
 - **Why 063 is unaffected.** 063's families are proper irreducible components of RatCurves^n (its `lem:minimum-degree-incidence` checks this), and Theorem 3.5 is true for those.
 - **Occhetta's induction (Step 2) also works with components.** For a general fibre G_σ, a covering irreducible component of the V^i-curves inside G_σ is an irreducible component of RatCurves^n(G_σ), because deformations in G_σ stay in the component V^i. It is proper and covering, with the same degree, since K_{G_σ} = K_X|_{G_σ}.
-- **Not re-checked:** Occhetta's remaining inputs. These are Andreatta–Wiśniewski 1997 Prop. 1.3 (an equidimensional contraction onto a target with quotient singularities has smooth target), Fujita 1987 Lemma 2.12, Kebekus 2002 / Cho–Miyaoka–Shepherd-Barron (ρ = 1), and Lazarsfeld 1984 Thm 4.1.
+- **Occhetta's own inputs, checked:**
+  - **Andreatta–Wiśniewski 1997, Prop. 1.3** ([alg-geom/9611017](https://arxiv.org/abs/alg-geom/9611017)): "a Fano–Mori equidimensional contraction from a smooth n-fold onto a target with at most quotient singularities has smooth target". This matches Occhetta's use in Step 4.
+    - The proof was checked: take a local Galois cover S → Z, smooth and étale off Sing Z. The normalized fibre product is étale over X by purity, and flat over S. Then χ(O) = 1 on the fibres forces the stabilizers to be trivial.
+    - The hypotheses hold in Step 4: X is Fano by Step 1, φ_Σ is equidimensional by Step 2, and Y_Σ = P^m/Γ.
+  - **Kebekus 2002, Thm 1.1** ([math/0107069](https://arxiv.org/abs/math/0107069)) is stated with a stronger hypothesis than Occhetta's ρ = 1 case provides: it assumes −K·C ≥ n+1 for *every* curve. The proof uses that hypothesis only to obtain:
+    - a degree-(n+1) rational curve through a very general point x;
+    - compactness of the component H_x of RatCurves^n(x, X) containing it.
+
+    An unsplit covering component of degree n+1 supplies both, since H_x maps into it and it is proper. The rest of the proof uses only H_x. So the citation covers Occhetta's use for n ≥ 3; n ≤ 2 is classical. Cho–Miyaoka–Shepherd-Barron Cor. 0.4, the alternative citation, was not available.
+  - **Lazarsfeld 1984, Thm 4.1:** a smooth projective variety that is the image of a surjective morphism from P^n is P^n. This is confirmed as stated by Occhetta–Wiśniewski ([math/0105166](https://arxiv.org/abs/math/0105166)), in characteristic 0. It matches Step 4.
+  - **Fujita 1987, Lemma 2.12** (*Adv. Stud. Pure Math.* 10; the original was not available):
+    - As restated in [arXiv 1212.3593](https://arxiv.org/abs/1212.3593), Thm F2: let π : X → Y be equidimensional, with X smooth and Y normal, and let L be an ample line bundle restricting to (P^n, O(1)) on a general fibre. Then Y is smooth and π is a P^n-bundle. Novelli–Occhetta use it the same way.
+    - **One unexplained step in Occhetta's Step 3.** He applies the lemma to ψ_{θΘ} with H, the pullback of the closure of a hyperplane section defined only over an open U ⊂ B. He checks only that H is O(1) on a general fibre. The lemma needs H to be ample relative to ψ_{θΘ}, including over the finitely many points of B outside U, and this is not argued.
+    - It looks repairable. Every fibre of ψ_{θΘ} maps finitely into a fibre of Y^ω_B → B, and all contracted curve classes are positive multiples of one ray. But this repair was not completed here.
 - **Independent use.** Occhetta applies the theorem in exactly 063's case (equal degrees ι, components) in Novelli–Occhetta, [arXiv 0905.4388](https://arxiv.org/abs/0905.4388), Lemma 4.4.
 
 ## Minor
