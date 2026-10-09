@@ -123,8 +123,22 @@ Each holds at p = 2, but Kisin–Zhou cite only p > 2 sources for them:
 
 **Verdict on Kisin–Zhou Thm 2.2.7: the proof is correct as structured, including at p = 2.** At p = 2 it needs Kim 2012 (or Lau 2014, Liu 2013) for the Breuil–Kisin–Dieudonné comparison, which Kisin–Zhou do not cite. That is a citation gap, not a mathematical one.
 
+**Gleason–Lim–Xu (arXiv:2208.07195v3), checked section by section.** Kisin–Zhou Thm 2.2.5 is GLX Cor. 6.3. Its proof uses only GLX §3: Cor. 3.13, which rests on Prop. 3.12, GL22 connectedness and Thm 3.9. It does not use GLX Thm 6.2.
+- **A gap on 001's chain.** GLX Lemma 3.2 claims π0(F/K) = π0(F)/K for every locally profinite K. This is false as stated.
+  - Counterexample: K = ℤ acting by translation on ℤ_p × Spd C_p. The quotient ℤ_p/ℤ is indiscrete, so π0(F/K) is a point, while π0(F)/K is uncountable.
+  - The proof's step "π0 commutes with colimits" holds only for colimits in totally disconnected spaces.
+- **Effect on Prop. 3.12.** Its written proof (transitivity of G(ℚ_p) on π0(Sht_∞ × C_p)) uses exactly this step, so as written it is invalid.
+- **The statement is very likely true.** A repair: components of Sht_K × C_p are open (Thm 3.9, with X_μ^K(b) locally noetherian), then use GL22 connectedness. The repair still needs one step (★): for a compact open K, the fibres of π0(Sht_∞) → π0(Sht_K) are K-orbits. Gleason states (★) as Gle22 v4 Lemma 3.11(1) without proof. It is routine when the components are quasi-compact; the general case was not closed here.
+- **So 001's chain has one link whose published proof has a gap:** 001 Cor. 3.4 → Kisin–Zhou Thm 2.2.7 → Thm 2.2.5 = GLX Cor. 6.3 → GLX Prop. 3.12. The gap is in a human-written source, four levels below 001, and very likely repairable.
+- **GLX Thm 6.2 itself.**
+  - §6 checks out. The one omission is that Lemma 6.13 needs G(ℚ_p)/N_x to be discrete; it is, since N_x ⊇ Z(G)(ℚ_p)·G^der_x, which is open. Lemma 6.13's finiteness input (Hamacher–Viehmann Thm 1.2) needs no condition on G.
+  - §4: the reduction used for Thm 6.2 is valid. The (2)⇒(3) direction (Prop. 4.11), not used here, has a fixable gap. Def. 4.1 is missing the word "proper". (3.23) is misstated, but its conclusion is true for all G.
+  - §5 is correct for non-quasi-split G. Prop. 5.9 omits the routine replacement of b by a decent representative.
+  - The anisotropic case avoids Prop. 3.12. The isotropic case uses it through (4)⇒(5) (Lemmas 6.12–6.13) and through (★) in (5)⇒(1).
+  - Citation slips: Gle22 Prop. 2.12 is Prop. 1.9 of v2 (or Gle21). Vie24 Thm 5.2 is Prop. 5.1 of v1. PR24 "Lemma 4.1.0.2" is 4.10.2.
+
 **Not re-derived:**
-- the proofs of Gleason–Lim–Xu Thm 6.2 and Anschütz's theorem;
+- the proof of (★) in the non-quasi-compact case, and Anschütz's theorem;
 - Wintenberger Cor. 4.5.3;
 - Kisin–Madapusi Pera–Shin Cor. 1.1.17;
 - Noot's ℓ-independence.
