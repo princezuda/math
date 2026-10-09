@@ -54,10 +54,12 @@ The paper works through small quantum cohomology.
 
     An unsplit covering component of degree n+1 supplies both, since H_x maps into it and it is proper. The rest of the proof uses only H_x. So the citation covers Occhetta's use for n ≥ 3; n ≤ 2 is classical. Cho–Miyaoka–Shepherd-Barron Cor. 0.4, the alternative citation, was not available.
   - **Lazarsfeld 1984, Thm 4.1:** a smooth projective variety that is the image of a surjective morphism from P^n is P^n. This is confirmed as stated by Occhetta–Wiśniewski ([math/0105166](https://arxiv.org/abs/math/0105166)), in characteristic 0. It matches Step 4.
-  - **Fujita 1987, Lemma 2.12** (*Adv. Stud. Pure Math.* 10; the original was not available):
-    - As restated in [arXiv 1212.3593](https://arxiv.org/abs/1212.3593), Thm F2: let π : X → Y be equidimensional, with X smooth and Y normal, and let L be an ample line bundle restricting to (P^n, O(1)) on a general fibre. Then Y is smooth and π is a P^n-bundle. Novelli–Occhetta use it the same way.
-    - **One unexplained step in Occhetta's Step 3.** He applies the lemma to ψ_{θΘ} with H, the pullback of the closure of a hyperplane section defined only over an open U ⊂ B. He checks only that H is O(1) on a general fibre. The lemma needs H to be ample relative to ψ_{θΘ}, including over the finitely many points of B outside U, and this is not argued.
-    - It looks repairable. Every fibre of ψ_{θΘ} maps finitely into a fibre of Y^ω_B → B, and all contracted curve classes are positive multiples of one ray. But this repair was not completed here.
+  - **Fujita 1987, Lemma 2.12** (*Adv. Stud. Pure Math.* 10, pp. 167–178; read in the original):
+    - The statement: "Let f: M → S be a surjective morphism from a manifold M onto a normal projective variety S. Let L be an **ample** line bundle on M and suppose that (F, L_F) ≅ (P^r, O(1)) for every general fiber F of f. Suppose further that dim Z = r for every fiber Z of f. Then S is non-singular and f makes (M, L) a scroll over S."
+    - The proof uses ampleness essentially. It takes aL very ample, and it needs L·X_i ≥ 1 on every component X_i of a special fibre to force Σ d_i = 1.
+    - Höring–Novelli ([arXiv 1201.4009](https://arxiv.org/abs/1201.4009), Thm 1.2) restate it with a φ-ample divisor A, and they note that this hypothesis is "rather restrictive".
+    - **The gap in Occhetta's Step 3 stands.** He applies the lemma to ψ_{θΘ} with H, the pullback of the closure of a hyperplane section defined only over an open U ⊂ B. He checks only that H is O(1) on a general fibre; relative ampleness over the finitely many points of B outside U is not argued.
+    - **A possible repair, not carried out.** Höring–Novelli Thm 1.3 removes the ample-divisor hypothesis: an equidimensional elementary contraction of fibre type of a manifold, with length equal to fibre dimension + 1, is a projective bundle. In 063's setting every ray has length ι, which is fibre dimension + 1, and the contractions are equidimensional by Occhetta's Step 2. So one could likely rebuild Occhetta's Steps 3–4 on Höring–Novelli. That has not been done here.
 - **Independent use.** Occhetta applies the theorem in exactly 063's case (equal degrees ι, components) in Novelli–Occhetta, [arXiv 0905.4388](https://arxiv.org/abs/0905.4388), Lemma 4.4.
 
 ## Minor
