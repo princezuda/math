@@ -2,7 +2,7 @@
 
 **Goal.** Follow every cited result that a proof in family 376 actually depends on, and stop when nothing more is inherited or a flaw turns up.
 
-**Verdict: no inherited flaw.** The chain stops after one level.
+**Verdict: no inherited flaw.** The chain stops after one level. There is one citation gap: the undecidability corollaries cite only Turing §8, which needs Post 1947 for arbitrary machines.
 
 ## 1. What Lean covers
 
@@ -56,4 +56,6 @@ Its own citations are background only (Aronson; the explicit heat bounds are pro
   - Post's substantive critique is that §8 is literally stated for machines obeying Turing's F/E-square convention. Post repairs this for arbitrary machines in his 1947 Appendix.
 - **The papers' reduction is correct.** It reduces printing to halting: halt after printing s, and send every ordinary stop into a loop.
 - **Halting undecidability for the papers' model is standard and independent of Turing's wording.** Sources include Post 1947 (two-way tape, stopping when no instruction applies), Davis 1958, every textbook, and Mathlib's `ComputablePred.halting_problem`.
-- **Optional wording fixes.** Cite p. 248. For the precise statement for arbitrary machines, cite Post 1947 or a textbook. The "machine" → "algorithm" step goes through the Church–Turing thesis.
+- **Citation gap (not a mathematical gap).** The papers cite only Turing §8 for undecidability for arbitrary machines. §8 as published covers only convention machines; the statement for arbitrary machines is due to Post 1947 (Appendix). The papers should cite Post 1947, or Davis 1958 or a textbook, alongside Turing §8 (p. 248). The fact itself is standard and true.
+  - This affects only the undecidability corollaries ("no algorithm decides the event"). It does not affect the main equivalence event ⇔ halts, which Lean proves.
+  - The "machine" → "algorithm" step goes through the Church–Turing thesis.
