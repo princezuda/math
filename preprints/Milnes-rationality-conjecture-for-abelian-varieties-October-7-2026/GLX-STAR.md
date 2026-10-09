@@ -22,8 +22,15 @@ For minuscule μ, Sht_(G,b,μ,K) is a smooth rigid analytic space for every comp
 
 ## Standard facts used
 
+- **(T0) Separatedness.** X is separated.
+  - Sht_K → Gr^b_μ is separated, being the quotient by K of a G(ℚ_p)-torsor, whose diagonal is clopen.
+  - Gr^b_μ is open in the flag variety, which is separated.
+  - So quasi-compact opens of X and of every Y_i are spectral, which is what (T4) needs below.
 - **(T1) Normal rigid spaces.**
-  - Every point has a basis of quasi-compact connected open neighbourhoods. Indeed, a normal affinoid algebra is a finite product of domains, and the adic spectrum of an affinoid domain is connected.
+  - Every point, including higher-rank points, has a basis of rational subsets.
+  - A rational subdomain of a normal affinoid is normal, by excellence (Conrad, *Irreducible components of rigid spaces*, §1–2). A normal affinoid algebra is a finite product of domains.
+  - For an affinoid domain B, Spa(B) is connected, since by Tate acyclicity a clopen splitting would give an idempotent.
+  - So every point has a basis of quasi-compact connected open neighbourhoods.
   - Hence a normal rigid space is locally connected, its connected components are open, and a quasi-compact one has finitely many components, each clopen.
 - **(T2) Rigid-space maps.** Étale maps of rigid spaces are open, and finite maps are closed (Huber, *Étale cohomology of rigid analytic varieties and adic spaces*, §1.7, and finite ⇒ proper). For rigid spaces |Y^◇| = |Y| ([Sch17, Lemma 15.6]).
 - **(T3) Diamonds** ([Sch17]).
@@ -61,7 +68,7 @@ Then:
 - D_i → C is finite étale, and it is surjective by the argument of Step 1.
 - Each transition map D_j → D_i is surjective: by (T2) its image is clopen in D_i, and D_i is connected.
 
-**Step 3 (local monodromy is dense).** Fix a classical point c₀ ∈ C and a point e₀ ∈ E over it, and write ē₀ for its image in D_i.
+**Step 3 (local monodromy is dense).** Fix a classical point c₀ ∈ C. There is a point e₀ ∈ E over it: the fibre of E over c₀ is the inverse limit of the fibres of the D_i, which are nonempty finite sets because the maps D_j → D_i are surjective. In particular, E is nonempty. Write ē₀ for the image of e₀ in D_i.
 
 Let 𝒲 be the set of quasi-compact connected opens W ⊂ C containing c₀.
 - 𝒲 is directed under union.
@@ -123,6 +130,8 @@ Claim: G(ℚ_p) acts transitively on π0(Sht_∞ × Spd C_p).
 
 ## Scope
 
-- The only place minuscule μ is used is (T1)–(T2): local connectedness and the open/closed properties at finite level.
+- Minuscule μ is used through (T0)–(T2) and the existence of classical points. All of these come from Sht_K being a separated smooth rigid space.
+- **Independent check.** A separate reviewer checked every step and found no error. Its gaps are now fixed: separatedness (T0), the references in (T1), and the existence of e₀.
+- **Not checked:** that the proof of [GL22], the connectedness of Gr^b_μ, does not itself rely on GLX Lemma 3.2.
 - For non-minuscule μ, Sht_K is only a locally spatial diamond. The same proof works once each Sht_K × Spd C_p is locally connected with a basis of quasi-compact connected opens; I have not checked whether that is known.
 - Steps 1–5 never use Lemma 3.2.
