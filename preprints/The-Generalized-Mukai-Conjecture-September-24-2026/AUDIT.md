@@ -2,7 +2,7 @@
 
 This paper has no Lean formalization. It was read in full twice, by two independent reviewers: the lead auditor, and a separate adversarial check of every section. The load-bearing cited papers were then checked against their sources, because in other audits the gaps sat in cited human papers, not in the paper itself (see the [Milne audit](../Milnes-rationality-conjecture-for-abelian-varieties-October-7-2026/AUDIT.md)).
 
-**Verdict: no error was found in the proof of the inequality ρ_X(ι_X − 1) ≤ n or in the equality case.** One cited theorem, Occhetta 2006, is stated more generally than its proof supports. The paper uses it only in the case where the proof is valid. Occhetta's proof also has one unexplained step, a relative-ampleness check in his Step 3. It looks repairable but was not repaired here, and it affects only the equality case.
+**Verdict: no error was found in the proof of the inequality ρ_X(ι_X − 1) ≤ n or in the equality case.** One cited theorem, Occhetta 2006, is stated more generally than its proof supports. The paper uses it only in the case where the proof is valid. Occhetta's proof also has one unexplained step, a relative-ampleness check in his Step 3, which affects only the equality case. [EQUALITY-REPAIR.md](EQUALITY-REPAIR.md) proves the case 063 needs by a route that avoids it (not refereed).
 
 This is evidence, not a proof. Neither reviewer is a referee in the field, and the result settles a conjecture that has been open since 2003, so expert review is warranted.
 
@@ -59,7 +59,7 @@ The paper works through small quantum cohomology.
     - The proof uses ampleness essentially. It takes aL very ample, and it needs L·X_i ≥ 1 on every component X_i of a special fibre to force Σ d_i = 1.
     - Höring–Novelli ([arXiv 1201.4009](https://arxiv.org/abs/1201.4009), Thm 1.2) restate it with a φ-ample divisor A, and they note that this hypothesis is "rather restrictive".
     - **The gap in Occhetta's Step 3 stands.** He applies the lemma to ψ_{θΘ} with H, the pullback of the closure of a hyperplane section defined only over an open U ⊂ B. He checks only that H is O(1) on a general fibre; relative ampleness over the finitely many points of B outside U is not argued.
-    - **A possible repair, not carried out.** Höring–Novelli Thm 1.3 removes the ample-divisor hypothesis: an equidimensional elementary contraction of fibre type of a manifold, with length equal to fibre dimension + 1, is a projective bundle. In 063's setting every ray has length ι, which is fibre dimension + 1, and the contractions are equidimensional by Occhetta's Step 2. So one could likely rebuild Occhetta's Steps 3–4 on Höring–Novelli. That has not been done here.
+    - **A possible repair, not carried out.** Höring–Novelli Thm 1.3 removes the ample-divisor hypothesis: an equidimensional elementary contraction of fibre type of a manifold, with length equal to fibre dimension + 1, is a projective bundle. In 063's setting every ray has length ι, which is fibre dimension + 1, and the contractions are equidimensional by Occhetta's Step 2. **This rebuild is written out in [EQUALITY-REPAIR.md](EQUALITY-REPAIR.md) (not refereed).** It covers the equal-degree case that 063 needs. It uses Höring–Novelli plus a lifting lemma (pseudoindex does not drop along projective bundles), and it bypasses Fujita's lemma entirely.
 - **Independent use.** Occhetta applies the theorem in exactly 063's case (equal degrees ι, components) in Novelli–Occhetta, [arXiv 0905.4388](https://arxiv.org/abs/0905.4388), Lemma 4.4.
 
 ## Minor
