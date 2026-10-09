@@ -132,6 +132,9 @@ Claim: G(ℚ_p) acts transitively on π0(Sht_∞ × Spd C_p).
 
 - Minuscule μ is used through (T0)–(T2) and the existence of classical points. All of these come from Sht_K being a separated smooth rigid space.
 - **Independent check.** A separate reviewer checked every step and found no error. Its gaps are now fixed: separatedness (T0), the references in (T1), and the existence of e₀.
-- **Not checked:** that the proof of [GL22], the connectedness of Gr^b_μ, does not itself rely on GLX Lemma 3.2.
+- **[GL22] does not use GLX Lemma 3.2.** This was checked against arXiv:2210.08625v2.
+  - GL22 cites GLX only in its introduction, as an application.
+  - Its Thm 3.1 (Gr^b_μ is dense and connected) is proved by bounding the ℓ-cohomological dimension of the non-admissible Newton strata below dim Gr_μ, using Fargues–Scholze and Hamann.
+  - The only quotient by G(ℚ_p) there, [G(ℚ_p)\Gr°_μ] → Bun_G, enters through its smoothness and relative dimension, never through π0.
 - For non-minuscule μ, Sht_K is only a locally spatial diamond. The same proof works once each Sht_K × Spd C_p is locally connected with a basis of quasi-compact connected opens; I have not checked whether that is known.
 - Steps 1–5 never use Lemma 3.2.
