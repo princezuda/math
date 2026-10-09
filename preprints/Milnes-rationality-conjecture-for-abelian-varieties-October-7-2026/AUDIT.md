@@ -92,7 +92,7 @@ Hence W ≅ U^{⊕8s[F:ℚ]}, with multiplier c, as the paper claims.
 - **Pappas–Rapoport** (arXiv:2106.08270v6), Def. 4.5.1 ("let p be a prime number"):
   - Thm 4.5.2 (= Kisin–Zhou Thm 2.1.12);
   - Thm 4.10.6, under condition (U_x).
-- **Gleason–Lim–Xu** (arXiv:2208.07195v3), Cor. 6.3: it proves (U_x) for any tuple of global Hodge type. Their Assumption 1.4 (p ≠ 2, tame) applies only to the §1 corollaries.
+- **Gleason–Lim–Xu** (arXiv:2208.07195v3; Invent. Math. 243 (2025)), Cor. 6.3: it proves (U_x) for any tuple of global Hodge type. Their Assumption 1.4 (p ≠ 2, tame) applies only to the §1 corollaries.
 
 **Kisin–Zhou Thm 2.2.7, the CM lifting that Cor. 3.4 uses (pp. 13–14).** The hypotheses hold for (J, X_J, 𝒥): strongly admissible, J_{ℚ_p} quasi-split, K^p neat. The proof follows Kisin 2017, Thm 2.2.3. Each step was checked against its source:
 
@@ -123,7 +123,7 @@ Each holds at p = 2, but Kisin–Zhou cite only p > 2 sources for them:
 
 **Verdict on Kisin–Zhou Thm 2.2.7: the proof is correct as structured, including at p = 2.** At p = 2 it needs Kim 2012 (or Lau 2014, Liu 2013) for the Breuil–Kisin–Dieudonné comparison, which Kisin–Zhou do not cite. That is a citation gap, not a mathematical one.
 
-**Gleason–Lim–Xu (arXiv:2208.07195v3), checked section by section.** Kisin–Zhou Thm 2.2.5 is GLX Cor. 6.3. Its proof uses only GLX §3: Cor. 3.13, which rests on Prop. 3.12, GL22 connectedness and Thm 3.9. It does not use GLX Thm 6.2.
+**Gleason–Lim–Xu (arXiv:2208.07195v3; published as [Invent. Math. 243 (2025), 805–861](https://doi.org/10.1007/s00222-025-01386-1)), checked section by section.** Lemma 3.2 and Prop. 3.12 are unchanged in the published version. Kisin–Zhou Thm 2.2.5 is GLX Cor. 6.3. Its proof uses only GLX §3: Cor. 3.13, which rests on Prop. 3.12, GL22 connectedness and Thm 3.9. It does not use GLX Thm 6.2.
 - **A gap on 001's chain.** GLX Lemma 3.2 claims π0(F/K) = π0(F)/K for every locally profinite K. This is false as stated.
   - Counterexample: K = ℤ acting by translation on ℤ_p × Spd C_p. The quotient ℤ_p/ℤ is indiscrete, so π0(F/K) is a point, while π0(F)/K is uncountable.
   - The proof's step "π0 commutes with colimits" holds only for colimits in totally disconnected spaces.
