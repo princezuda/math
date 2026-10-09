@@ -94,13 +94,45 @@ Hence W ≅ U^{⊕8s[F:ℚ]}, with multiplier c, as the paper claims.
   - Thm 4.10.6, under condition (U_x).
 - **Gleason–Lim–Xu** (arXiv:2208.07195v3), Cor. 6.3: it proves (U_x) for any tuple of global Hodge type. Their Assumption 1.4 (p ≠ 2, tame) applies only to the §1 corollaries.
 
-**Not re-derived:**
-- the proofs of Kisin–Zhou Thm 2.2.7 and Prop. 2.2.3 (via Zhou 2020 and Pappas–Rapoport);
-- Gleason–Lim–Xu's Thm 6.2.
+**Kisin–Zhou Thm 2.2.7, the CM lifting that Cor. 3.4 uses (pp. 13–14).** The hypotheses hold for (J, X_J, 𝒥): strongly admissible, J_{ℚ_p} quasi-split, K^p neat. The proof follows Kisin 2017, Thm 2.2.3. Each step was checked against its source:
 
-**Two slips in Kisin–Zhou 2025b, harmless here:**
+1. **A rational Newton representative and an embedded torus.**
+   - Quasi-splitness gives a ℚ_p-rational representative of ν_b and a Levi subgroup M_[b].
+   - T is maximal in J_b because rank I_x = rank G. This is Kisin–Madapusi Pera–Shin 2022, Thm 6 (= Cor. 2.1.9), proved for the closure-type model with no condition on p, from the finiteness of S(F_q), prime-to-p Hecke and Noot's ℓ-independence.
+   - T transfers into M_[b] (Langlands 1989); the conjugating torsor is trivial by Steinberg's theorem.
+2. **A cocharacter μ_T.** Kisin–Madapusi Pera–Shin Cor. 1.1.17 gives μ_T with j∘μ_T ∈ {μ} and average equal to ν_b. This is group theory.
+3. **Moving b_x into T.** b_x is basic in M = Cent(j(T′)). By Kottwitz 1997 it can be σ-conjugated into j(T), so (b_x, μ_T) is an admissible pair for T.
+4. **A p-divisible group with that filtration.** The filtration is weakly admissible (Rapoport–Zink), hence admissible (Colmez–Fontaine). Kisin 2006, Cor. 2.2.6 gives a p-divisible group G̃′. Only the isogeny version is used, and Kisin proved that version for p = 2 as well (Kim 2012, introduction).
+5. **Transferring the tensors.**
+   - Wintenberger 1997, Cor. 4.5.3 gives a tensor-preserving ℚ_p-isomorphism V_pG̃′ ≅ V_pG_x̃.
+   - After a finite extension and an isogeny, it becomes integral. This is a Galois-stable lattice, i.e. an isogenous p-divisible group, which works for every p.
+   - So the Galois action lands in G(ℤ_p).
+6. **Moving x within its isogeny class.** The G-shtuka (Pappas–Rapoport §2.6.2, Prop. 3.5.1) gives D(G̃′_k) = σ(g)D with g ∈ X_G(μ⁻¹, b_x). Replacing x by i_x(g) uses Thm 2.2.5 (= Gleason–Lim–Xu Cor. 6.3).
+7. **The lift.** Prop. 2.2.3 then makes the lift G̃ a point x̃.
+8. **x̃ is special.** T preserves the filtration, so it acts on G̃ up to isogeny (Fontaine plus Tate's theorem), and on A_x̃ (Serre–Tate); Mumford–Tate(A_x̃) ⊂ Cent_G(T) = T. Kisin–Zhou write "lifts" without naming the tool. This is the same route as the comparison-theorem fix of finding 3, and it is valid for every p and every e.
+
+**Prop. 2.2.3 at p = 2.** The proof uses three Breuil–Kisin inputs:
+- Kisin's lattice functor M, a ⊗-functor exact on D^×;
+- the torsor argument of Kisin–Pappas 2018, Lemma 3.3.5;
+- the identification D(G̃)(S)[1/p] = M(T_pG̃^∨) ⊗_{S,σ} S[1/p], with tensors.
+
+Each holds at p = 2, but Kisin–Zhou cite only p > 2 sources for them:
+- **The functor M.** It is a ⊗-functor for all p (Kisin 2006, Prop. 2.1.12; Kim 2012, Thm 2.3(2)).
+- **The comparison with the Dieudonné crystal.** Kisin–Zhou take it from Kisin–Pappas Thm 3.3.2, which rests on Kisin 2010, Thm 1.4.2, proved for p > 2. At p = 2 it is Kim 2012, Prop. 4.2(1): D*(G)(S) = S ⊗_{φ,S} M_G (also Lau 2014, Liu 2013). The same comparison is needed integrally in Pappas–Rapoport Prop. 3.5.1, used in step 6.
+- **The torsor.** For wildly ramified 𝒥 it needs H¹(D^×, 𝒥) = 1. Kisin–Pappas Cor. 3.3.6 assumes tameness; Anschütz's extension theorem (Pappas–Rapoport §3.5, citing An18 Cor. 1.2) removes it.
+
+**Verdict on Kisin–Zhou Thm 2.2.7: the proof is correct as structured, including at p = 2.** At p = 2 it needs Kim 2012 (or Lau 2014, Liu 2013) for the Breuil–Kisin–Dieudonné comparison, which Kisin–Zhou do not cite. That is a citation gap, not a mathematical one.
+
+**Not re-derived:**
+- the proofs of Gleason–Lim–Xu Thm 6.2 and Anschütz's theorem;
+- Wintenberger Cor. 4.5.3;
+- Kisin–Madapusi Pera–Shin Cor. 1.1.17;
+- Noot's ℓ-independence.
+
+**Slips in Kisin–Zhou 2025b, harmless here:**
 - The bibliography gives [KPZ] as arXiv:2402.05727, which is Daniels–Youcis; the correct number is arXiv:2409.03689.
 - Lemma 2.1.8 cites "[KZ, Proposition 2.4.11]". In arXiv v2 of KZ25a that number is the SL₂ lemma, and the proposition is 2.4.10; the Annals numbering may differ.
+- Kim 2012, Lau 2014 and Liu 2013 are not cited, though Prop. 2.2.3 and Thm 2.2.7 need them at p = 2.
 
 ## Dependence on the companion paper
 
@@ -110,6 +142,6 @@ Hence W ≅ U^{⊕8s[F:ℚ]}, with multiplier c, as the paper claims.
 
 There is no circularity. The companion cites this paper only in a remark that it marks as not an input.
 
-If the companion holds, Theorem 1.1 follows from Corollary 3.4 and Lemma 2.3 alone. Either way, the general case rests on the §3 transport, and so on Kisin–Zhou Thm 2.2.7.
+If the companion holds, Theorem 1.1 follows from Corollary 3.4 and Lemma 2.3 alone. Either way, the general case rests on the §3 transport, and so on Kisin–Zhou Thm 2.2.7, which is checked above.
 
 `paper.pdf` and `build/` are unchanged.
