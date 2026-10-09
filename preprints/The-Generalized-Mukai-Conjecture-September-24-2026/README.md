@@ -15,3 +15,7 @@
 }
 ```
 
+
+## Audit
+
+An independent audit found no error in the proof of the inequality or in the equality case. Its cited papers were checked against their sources. Occhetta 2006, used for the equality case, states its Theorem 3.5 in a generality where it is false. The paper uses it only for irreducible components of RatCurves<sup>n</sup>, where it holds. See [AUDIT.md](AUDIT.md).
