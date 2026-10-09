@@ -127,6 +127,15 @@ Each holds at p = 2, but Kisin–Zhou cite only p > 2 sources for them:
 - **A gap on 001's chain.** GLX Lemma 3.2 claims π0(F/K) = π0(F)/K for every locally profinite K. This is false as stated.
   - Counterexample: K = ℤ acting by translation on ℤ_p × Spd C_p. The quotient ℤ_p/ℤ is indiscrete, so π0(F/K) is a point, while π0(F)/K is uncountable.
   - The proof's step "π0 commutes with colimits" holds only for colimits in totally disconnected spaces.
+- **Double-checked against Scholze, *Étale cohomology of diamonds*, Props. 12.7, 12.9 and 12.10.**
+  - F → F/K is a surjection of v-sheaves, so |F| → |F/K| is a quotient map (Prop. 12.9).
+  - The action is free, so F ×_{F/K} F = K × F. With Prop. 12.10, the identified points are exactly the K-orbits.
+  - Hence |F/K| = ℤ_p/ℤ with the quotient topology. A nonempty open ℤ-stable set contains a + p^nℤ_p + ℤ = ℤ_p, so the topology is indiscrete.
+  - |F/K| is connected, while π0(F)/K = ℤ_p/ℤ is uncountable, as a set or as a topological quotient.
+  - The first claim, |F/K| = |F|/K, is correct.
+  - The second claim holds for compact K acting on quasi-compact spaces, but fails for non-compact K. Prop. 3.12 uses the non-compact group G(ℚ_p).
+  - If "π0(F)/K" is read as the colimit in totally disconnected spaces, the lemma becomes true, but Prop. 3.12's deduction of transitivity then fails.
+- **No independent proof found.** Gleason's analogue, Gle22 v4 Lemma 3.11(1), is proved only for unramified G with (b, μ) HN-irreducible. It assumes (★), and it uses the known bijection π0(X_μ(b)) ≅ π0(X^ab), which is what GLX set out to prove in general.
 - **Effect on Prop. 3.12.** Its written proof (transitivity of G(ℚ_p) on π0(Sht_∞ × C_p)) uses exactly this step, so as written it is invalid.
 - **The statement is very likely true.** A repair: components of Sht_K × C_p are open (Thm 3.9, with X_μ^K(b) locally noetherian), then use GL22 connectedness. The repair still needs one step (★): for a compact open K, the fibres of π0(Sht_∞) → π0(Sht_K) are K-orbits. Gleason states (★) as Gle22 v4 Lemma 3.11(1) without proof. It is routine when the components are quasi-compact; the general case was not closed here.
 - **So 001's chain has one link whose published proof has a gap:** 001 Cor. 3.4 → Kisin–Zhou Thm 2.2.7 → Thm 2.2.5 = GLX Cor. 6.3 → GLX Prop. 3.12. The gap is in a human-written source, four levels below 001, and very likely repairable.
