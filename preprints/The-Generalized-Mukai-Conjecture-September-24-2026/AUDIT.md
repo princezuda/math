@@ -52,7 +52,7 @@ The paper works through small quantum cohomology.
     - a degree-(n+1) rational curve through a very general point x;
     - compactness of the component H_x of RatCurves^n(x, X) containing it.
 
-    An unsplit covering component of degree n+1 supplies both, since H_x maps into it and it is proper. The rest of the proof uses only H_x. So the citation covers Occhetta's use for n ≥ 3; n ≤ 2 is classical. Cho–Miyaoka–Shepherd-Barron Cor. 0.4, the alternative citation, was not available.
+    An unsplit covering component of degree n+1 supplies both, since H_x maps into it and it is proper. The rest of the proof uses only H_x. So the citation covers Occhetta's use for n ≥ 3; n ≤ 2 is classical. Cho–Miyaoka–Shepherd-Barron, the alternative citation, was not available. Occhetta cites it as Cor. 0.4, Höring–Novelli as Cor. 0.3.
   - **Lazarsfeld 1984, Thm 4.1:** a smooth projective variety that is the image of a surjective morphism from P^n is P^n. This is confirmed as stated by Occhetta–Wiśniewski ([math/0105166](https://arxiv.org/abs/math/0105166)), in characteristic 0. It matches Step 4.
   - **Fujita 1987, Lemma 2.12** (*Adv. Stud. Pure Math.* 10, pp. 167–178; read in the original):
     - The statement: "Let f: M → S be a surjective morphism from a manifold M onto a normal projective variety S. Let L be an **ample** line bundle on M and suppose that (F, L_F) ≅ (P^r, O(1)) for every general fiber F of f. Suppose further that dim Z = r for every fiber Z of f. Then S is non-singular and f makes (M, L) a scroll over S."
