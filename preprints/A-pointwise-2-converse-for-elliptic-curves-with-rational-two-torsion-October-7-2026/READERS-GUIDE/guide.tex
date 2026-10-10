@@ -1,0 +1,1081 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,array,longtable}
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+
+\setlist{nosep,topsep=3pt}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+
+\newtheorem{lemma}{Lemma}
+\renewcommand{\thelemma}{\Alph{lemma}}
+\theoremstyle{remark}
+\newtheorem*{inwords}{In words}
+
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\R}{\mathbb R}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\Sha}{\text{\rm Sha}}
+\DeclareMathOperator{\Sel}{Sel}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\corank}{corank}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\Fr}{Fr}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\length}{length}
+\makeatletter
+\DeclareUrlCommand\lbl{\urlstyle{tt}\def\UrlBreaks{\do\:\do\-}}
+\makeatother
+\newcommand{\src}[2]{\textsf{\small #1:#2}}
+
+\hypersetup{pdftitle={A pointwise 2-converse: a reader's guide}}
+
+\title{A pointwise $2$-converse: a reader's guide}
+\author{Companion to OpenAI preprint\\
+{\small\texttt{OAI:A-pointwise-2-converse-for-elliptic-curves-}}\\
+{\small\texttt{with-rational-two-torsion-October-7-2026}.}\\
+Independent exposition; all mathematics is the preprint's.}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fbox{\parbox{0.92\textwidth}{\small
+\textbf{Status.} The preprint \cite{P2C} is unrefereed, and no Lean or other
+formalization exists. It is used essentially by OpenAI's preprint on
+Hilbert's tenth problem over~$\Q$ \cite{H10}: its \S3 needs exactly
+Theorem~1.1 below to exclude ``rank $0$ with a divisible part of $\Sha$
+of $2$-corank $1$''. Combined with Smith's theorem on the $50/50$
+distribution of $2^\infty$-Selmer coranks in quadratic-twist families
+\cite{Smith2025}, Theorem~1.1 would give Goldfeld's conjecture for every
+$E/\Q$ with rational $2$-torsion (twists of such curves keep their
+rational $2$-torsion). Our independent audit (four parallel reviews with
+numerical checks) found \emph{no error}. It does flag infrastructure that is
+\emph{sketched} rather than written out, above all the simultaneous
+ultrafilter-limit diagrams of the ring-class part (Section~\ref{sec:audit}).
+This guide is an exposition, not a referee report: none of us is a referee
+in the field, and the result is far beyond the published literature.}}
+\end{center}
+
+\paragraph{How to use this guide.}
+Sections~\ref{sec:thm}--\ref{sec:arch} (about six pages) give the
+architecture. Section~\ref{sec:replace} is the table of $p=2$ replacements,
+Section~\ref{sec:notation} the notation, and Section~\ref{sec:walk} a
+walk-through of the paper section by section, with label names and line
+numbers in the source files. We cite source locations as
+\src{file}{line}, for files in \texttt{build/sections/}; the numbers
+are approximate. Paper section numbers: \S1 introduction, \S2 preliminaries,
+\S3 \texttt{cyclotomic}, \S4 \texttt{ring-limits}, \S5
+\texttt{ring-determinants}, \S6 \texttt{nonvanishing}, \S7
+\texttt{coefficients}, \S8 \texttt{graphs}, \S9 \texttt{pointwise}.
+We sometimes simplify notation, and we say so when we do.
+
+\paragraph{A two-hour reading path in the paper.}
+\begin{enumerate}
+\item Introduction, \src{introduction}{97--160}, and the ledger,
+ \src{preliminaries}{127--151} (15 min).
+\item \lbl{cy:binary} and the proof of \lbl{cy:missing-vertex},
+ \src{cyclotomic}{121--163, 750--788}; then \lbl{cy:central}, lines
+ 629--748 (25 min).
+\item \lbl{rd:det-switch}, \src{ring-determinants}{473--565};
+ \lbl{rd:binary-transfer} and the proof of \lbl{rd:missing-vertex}, lines
+ 1648--1758 (20 min).
+\item \lbl{pw:odd-lower} and its two inputs, \src{pointwise}{355--497}; then
+ \lbl{pw:odd-base}, lines 872--1027 (25 min).
+\item The statement of \lbl{gr:address} and the $b=1$ example,
+ \src{graphs}{199--231, 435--454} (10 min).
+\item The infrastructure, read against Section~\ref{sec:walk} below:
+ \src{ring-limits}{91--281, 628--777} (25 min).
+\end{enumerate}
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+%======================================================================
+\section{The theorem, the state of the art, and why $p=2$ is hard}
+\label{sec:thm}
+
+\subsection{Statement}
+For $A/\Q$ put $r(A)=\rank A(\Q)$, $a(A)=\ord_{s=1}L(A,s)$ and
+\[
+ s_2(A)=\corank_{\Z_2}\Sel_{2^\infty}(A/\Q),
+\]
+with the local Kummer image at every place. By \lbl{pr:ranks}
+(\src{preliminaries}{13}), $s_2(A)=r(A)+\corank_{\Z_2}\Sha(A/\Q)[2^\infty]$.
+
+\medskip
+\noindent\textbf{Theorem 1.1} (\lbl{thm:main}, \src{introduction}{22}).
+\emph{Let $E/\Q$ be an elliptic curve with $E(\Q)[2]\ne0$ and
+$s_2(E)\in\{0,1\}$. Then}
+\[
+ \ord_{s=1}L(E,s)=\rank_\Z E(\Q)=s_2(E),\qquad \Sha(E/\Q)\text{ is finite.}
+\]
+
+\begin{inwords}
+A $2^\infty$-Selmer corank of $0$ or $1$ forces the analytic rank to equal
+that corank. Gross--Zagier--Kolyvagin then gives the rank and finiteness of
+$\Sha$. The hypothesis is the full Selmer \emph{corank}; it is never replaced
+by a finite $2$-Selmer dimension or by the Mordell--Weil rank.
+\end{inwords}
+
+The theorem covers one rational $2$-torsion line or full rational
+$2$-torsion, CM and non-CM curves, every isogeny configuration, and every
+reduction type at $2$ and at the bad primes (\src{introduction}{32--37}).
+It does not prove the BSD leading-term formula. The broader companion
+\cite{OAIGoldfeld} proves a $2$-converse without the $2$-torsion hypothesis,
+but is not an input here.
+
+\subsection{State of the art}
+The comparison below follows the paper's own summary
+(\src{introduction}{45--76}). We do not add hypotheses beyond what the
+paper states.
+
+\begin{center}\small
+\begin{tabular}{@{}P{0.27\textwidth}P{0.11\textwidth}P{0.55\textwidth}@{}}
+\toprule
+Result & Prime & Range as described in the preprint \\
+\midrule
+Kim \cite{Kim2023SoftConverse} & any & ``soft'' converse: $\rank=1$ and $\Sha$ finite $\Rightarrow$ $a=1$, every $E/\Q$ \\
+Skinner \cite{Skinner2020}; W.~Zhang \cite{Zhang2014Heegner} & odd & rank-one converses at good ordinary primes, under residual and local hypotheses \\
+Castella--Grossi--Lee--Skinner \cite[Thm.~E]{CGLS2022} & odd Eisenstein & good reduction, with a local-character restriction \\
+Keller--Yin \cite[Thm.~B]{KellerYin2024} & odd Eisenstein & potentially good ordinary, without that restriction \\
+Burungale--Tian \cite{BurungaleTian2026} & every $p$ & CM curves, rank zero \\
+Burungale--Skinner \cite[Thms.~A.1, A.3]{BurungaleSkinner2024Appendix} & good ord./ss.\ & CM, rank one (supersingular with a localization hypothesis) \\
+Burungale--Castella--Skinner--Tian \cite{BurungaleCastellaSkinnerTian2022} & ordinary & CM, with a Hecke-conductor condition \\
+Kriz \cite[Thms.~1.1, 10.17(2)]{Kriz2022CM} & ramified in CM field & maximal-order CM, ranks $0,1$; includes the pointwise $2$-converse for the congruent-number family \\
+Smith \cite{Smith2025} & $2$ & density: $50/50$ distribution of $s_2$ in every twist family; decides no prescribed member \\
+\midrule
+\textbf{This preprint} & $2$ & every $E/\Q$ with $E(\Q)[2]\ne0$, non-CM included, no condition at $2$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Why $p=2$ with rational $2$-torsion is hard}
+\label{sec:hard}
+A Kolyvagin- or Kato-style converse at an odd prime $p$ uses, implicitly or
+explicitly, the following steps. Each one fails or loses control at $p=2$
+when $E[2]$ has a rational point.
+\begin{enumerate}[label=(\roman*)]
+\item \emph{$\tau$-eigenspace splitting.} Complex conjugation $\tau$ splits
+ cohomology into $\pm$ eigenspaces via the idempotents $(1\pm\tau)/2$.
+ At $p=2$ these are not integral.
+\item \emph{Vanishing of $H^1(\Gal(K(E[2^n])/K),E[2^n])$.} For $p$ odd and
+ large image this gives injectivity of restriction to $K(E[p^n])$ and
+ clean descent of Kolyvagin derivative classes. At $2$ it fails in general.
+\item \emph{Residual irreducibility.} $E[2]$ is reducible by hypothesis.
+ Classically, irreducibility controls Selmer groups of $T/p^n$, gives
+ Kolyvagin-system rank bounds, and makes $\Lambda$-adic control work.
+\item \emph{Real places and Tate cohomology.} Over $\Q$ the real place
+ contributes $2$-torsion Tate cohomology. Nekov\'a\v{r}'s duality framework
+ assumes his condition (P), ``if $p=2$ then the base field has no real
+ prime'', and treats its absence separately
+ \cite[\S\S5.7, 6.9]{Nekovar2006}.
+\item \emph{Kato's integral divisibility.} Kato's integral statement
+ \cite[12.5(4)]{Kato2004} (and 13.4(3)) needs $p\ne2$, according to our
+ audit's reading of Kato. Only the rational divisibility \cite[12.5(3)]{Kato2004}
+ is available at $2$.
+\item \emph{Small numerical steps.} Examples are the factor
+ $\ell(\ell+1)/2$ in Kolyvagin's derivative, isotropy of local planes
+ deduced from skew-symmetry, and inertia projectors $(1+g)/2$. Each costs
+ a factor $2$ \emph{per prime}, which is fatal when the number of primes is
+ unbounded.
+\end{enumerate}
+Section~\ref{sec:replace} lists what replaces each step.
+
+%======================================================================
+\section{The missing-vertex idea}
+\label{sec:mv}
+
+Index quadratic twists by a binary cube. Fix a base $h_0$ (the curve being
+tested is $E^{(h_0)}$; in the end $h_0=1$). Choose primes $q\in Q$ and
+linear forms $\lambda_q:\F_2^b\to\F_2$, and put
+\[
+ h_x=h_0\prod_{q\in Q}(q^*)^{\lambda_q(x)},\qquad x\in\F_2^b,\qquad
+ q^*=\bigl(\tfrac{-1}{q}\bigr)q .
+\]
+Address $0$ is the unknown curve. The arithmetic constructs one element of a
+group ring $\Z_2[G]$, $G=(\Z/2)^b$ (with power-series coefficients in
+practice). Up to a uniformly bounded error, the valuation of its character
+value at $x$ is the normalized valuation of the $L$-value, or of the Heegner
+index, of $E^{(h_x)}$. The core is the following abstract
+statement, which is our simplified composite of Lemma~\lbl{cy:binary}
+(\src{cyclotomic}{121}) and the proof of Theorem~\lbl{cy:missing-vertex}
+(\src{cyclotomic}{763}).
+
+\begin{lemma}[Abstract missing vertex]\label{lem:A}
+Let $G=(\Z/2)^b$ with characters indexed by $x\in\F_2^b$, and let
+$u\in\Q_2[G]$ have character values $u_x$. Suppose
+\begin{enumerate}
+\item \emph{(uniform integrality)} $2^{C}u\in\Z_2[G]$;
+\item \emph{(bounded valuations off the base)} $u_x\ne0$ and $v_2(u_x)\le B$
+ for every $x\ne0$.
+\end{enumerate}
+If $M>B+C$ and $b>2^M-1$, then $u_0\ne0$ and $v_2(u_0)\le B$.
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+Write $z=2^Cu\in\Z_2[G]$. Expanding each sign character as $1-2x_i$ gives
+$z(x)=\sum_I 2^{|I|}a_I\prod_{i\in I}x_i$ with $a_I\in\Z_2$. The $j$-th
+binary digit of $z(x)$ is a Boolean polynomial in $x$ of degree at most
+$2^j$. So ``$z(x)\equiv z(0)\bmod 2^M$'' is a system of Boolean equations of
+total degree at most $2^M-1<b$. By the characteristic-$2$
+Chevalley--Warning count, the number of common zeros is even; since $x=0$ is
+one, there is an $x\ne0$ with $z_x\equiv z_0\pmod{2^M}$. As
+$v_2(z_x)\le B+C<M$, this forces $v_2(z_0)=v_2(z_x)$.
+\end{proof}
+
+With $r$ simultaneous tests the threshold is $b>r(2^M-1)$
+(\lbl{cy:binary}). The ring-class version, \lbl{rd:bits} and
+\lbl{rd:binary-transfer} (\src{ring-determinants}{1620--1699}), tests
+$L(M)+2$ Laurent coefficients at once.
+
+\paragraph{Why $b$ must be unbounded, and why $B$ must not depend on $b$.}
+Fourier inversion shows which functions $x\mapsto u_x$ come from
+$\Z_2[G]$. A simple example (ours, checked by hand) is
+\[
+ u=2^b\cdot1-\sum_{g\in G}g,\qquad u_0=0,\qquad u_x=2^b\ (x\ne0).
+\]
+Here $u$ is integral, every nonzero vertex has valuation exactly $b$, and
+the base vanishes. So a bound of the form $B\ge b$ proves nothing, and for a
+fixed $B$ the cube must have dimension $b>B$; the lemma asks for
+$b>2^{B+C+1}-1$.
+
+\begin{inwords}
+The arithmetic must deliver (1) one integral family whose denominator $C$ does
+not grow with $b$, $\#Q$ or the prime count of $h_0$, and (2) a valuation
+bound $B$ at the nonzero vertices that is equally uniform. Only then may $b$
+be taken large. Almost every technical device in the paper serves one of
+these two uniformities at the prime~$2$.
+\end{inwords}
+
+\paragraph{The two instances.}
+\begin{itemize}
+\item \emph{Cyclotomic, rank $0$} (\lbl{cy:missing-vertex},
+ \src{cyclotomic}{45}). Here $u\in\Lambda[G]$ with $2^{C_{\rm int}}u\in
+ \Lambda[G]$ (\lbl{cy:uniform-integrality}), and
+ $|v_2(u_x(0))-D(h_x)|\le C_{\rm loc}$ (\lbl{cy:central}), where
+ $D(h)=v_2(\cL(h))-2w(h)-s(h)$. One applies Lemma~\ref{lem:A} to the
+ constant coefficients.
+\item \emph{Ring class, rank $1$} (\lbl{rd:missing-vertex},
+ \src{ring-limits}{64}). The coordinates are not uniformly integral.
+ Instead there is a \emph{clearing factor} $f$ with $f_xu_x=d_x$, with
+ $v(f_0(0))$ and the Laurent pole order of $f$ bounded independently of $b$
+ (\lbl{rd:family-clearing}). Lemma~\ref{lem:A} is applied to finitely many
+ Laurent coefficients of $f$ and to the constant coefficient of $d$.
+\end{itemize}
+
+%======================================================================
+\section{Proof architecture}
+\label{sec:arch}
+
+\subsection{Rank zero: the cyclotomic route}
+If $s_2(E)=0$, the root number is $+1$ (parity, \lbl{pr:invariance}).
+\begin{enumerate}
+\item An \emph{even coefficient system} (\lbl{co:even}): a weight-$3/2$
+ form whose squarefree coefficients satisfy, within one local squareclass,
+ the exact Waldspurger ratio $2v(a(D)/a(D_0))=v(L_*(\sigma D)/L_*(\sigma D_0))$.
+\item With the cyclotomic lower bound \lbl{cy:lower-bound}, this defines a
+ binary \emph{symbol} $A(D)\in\{0,1\}$: $A(D)=1$ iff $a(D)$ has the minimal
+ normalized depth $\delta+w(D)$ (\lbl{co:minimum}). A unit symbol gives
+ $L_*\ne0$ and $v(L_*)\le2w+C$.
+\item The address lemma \lbl{gr:address} adjoins prime networks so that the
+ symbol is $1$ at every nonzero address of a cube based at $h=1$.
+\item Cyclotomic transfer \lbl{cy:missing-vertex} gives $L(E,1)\ne0$
+ (\lbl{pw:even-base}, \src{pointwise}{306}).
+\end{enumerate}
+The same construction, with a stationary base, gives the uniform \emph{even
+estimate} of \lbl{pw:partitionable-even}, namely $v(L_*(h))-2w(h)-s(h)\le C$ at every
+``partitionable'' $h$ of Selmer corank $0$.
+
+\subsection{Rank one: three companions}
+If $s_2(E)=1$, the root number is $-1$. There are three distinct auxiliary
+discriminants. Keeping them apart is the main bookkeeping point of
+\S\S7--9.
+\begin{description}
+\item[$h_*<0$ (fixed detector partner).] $L(E^{(h_*)},1)\ne0$. For $h>0$,
+ the genus-character Heegner sum $P_h$ over $\Q(\sqrt{hh_*})$ has height
+ $\sim L'(E^{(h)},1)L(E^{(h_*)},1)$, so it \emph{detects} a simple zero of
+ $E^{(h)}$. Its reductions modulo an auxiliary prime~$\ell$, through the supersingular
+ points of $X_0(N)$, give the
+ \emph{odd coefficients} (\lbl{co:theta-bridge}, \lbl{co:odd}).
+\item[$k'(h)<0$ (varying, bounded prime count).] To normalize the odd
+ coefficients one needs the lower bound $2j(P_h)\ge2w(h)+s(h)-C$,
+ uniform in the prime count of $h$ (\lbl{pw:odd-lower}). For each $h$ of
+ analytic rank one, choose $k'$ with $\omega(k')\le A$ and
+ $L(E^{(hk')},1)\ne0$ (\lbl{pw:rough-companion}, using the bounded-factor
+ nonvanishing \lbl{nv:rough}). Then combine three things: the ring-class
+ lower bound over $\Q(\sqrt{k'})$ (\lbl{rd:ring-lower}, uniform in
+ $\omega(k')\le A$); the even estimate at $hk'$; and the Gross--Zagier
+ height comparison \lbl{pw:height-comparison},
+ $2j_h(k)-2j(P_h)=v(L_*(hk))+O(1)$.
+\item[$k<0$ (fixed final companion).] It is chosen with
+ $L(E^{(k)},1)\ne0$ \emph{before} any cube dimension. Then
+ $s_2(E/K)=s_2(E)+s_2(E^{(k)})=1$ for $K=\Q(\sqrt k)$
+ (\lbl{pw:quadratic-corank}). Cubes based at $h=1$ have all new primes
+ split in $K$ and two simultaneous unit symbols at each $x\ne0$: odd at
+ $h_x$ and even at $h_xk$. These give $2j_{h_x}(k)-4w-s(h_x)-s(h_xk)\le C$,
+ and the fixed-$K$ ring-class transfer \lbl{rd:missing-vertex} returns
+ $\ord_{s=1}L(E,s)L(E^{(k)},s)=1$, hence $a(E)=1$ (\lbl{pw:odd-base}).
+\end{description}
+
+\begin{inwords}
+$h_*$ defines the detector, $k'(h)$ proves its lower bound, and the fixed $k$
+permits the final transfer (\src{introduction}{138--139}).
+\end{inwords}
+
+\paragraph{Order of choices.}
+The ledger at \src{preliminaries}{127--151} is worth reading first. Fixed
+arithmetic constants come first: the curve, the parametrization, the fixed
+support and local classes. Varying companions may depend only on a bound $A$
+for their prime count. The fixed transfer companion $K$ is chosen before $b$.
+Then come $b$, the finite networks, the coefficient precision, and an
+arithmetic ``stage'' (a precision $M$ and a reduction prime $\ell$). Prime
+sizes may grow with $b$; valuation constants may not.
+
+\subsection{Dependency diagram}
+Figure~\ref{fig:deps} refines the paper's Figure 1
+(\src{proof-roadmap-figure}{1--44}). Arrows mean ``is used by''.
+
+\begin{figure}[tbp]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  box/.style={draw,rounded corners=2pt,align=center,font=\scriptsize,
+              text width=4.5cm,inner sep=3pt,fill=white},
+  key/.style={draw,very thick,rounded corners=2pt,align=center,font=\scriptsize,
+              text width=4.5cm,inner sep=3pt,fill=black!6},
+  ar/.style={-{Stealth[length=2mm]},thick},
+  dar/.style={-{Stealth[length=2mm]},thick,dashed}]
+\def\xL{0} \def\xM{5.4} \def\xR{10.8}
+\node[key] (cy) at (\xL,0) {\textbf{\S3 cyclotomic}\\ \lbl{cy:lower-bound}, \lbl{cy:missing-vertex}\\ (Kato, Ferrero--Washington)};
+\node[box] (coev) at (\xM,0) {\textbf{\S7 even coefficients}\\ \lbl{co:even}, \lbl{co:minimum},\\ \lbl{co:symbol-interface}};
+\node[key] (rl) at (\xR,0) {\textbf{\S\S4--5 infrastructure}\\ \lbl{rl:limit-evaluation-package},\\ \lbl{rd:assembly}};
+\node[box] (pe) at (\xL,-2) {\lbl{pw:partitionable-even}\\ even estimate: $D(h)\le C$};
+\node[key] (gr) at (\xM,-2) {\textbf{\S8 graphs}: \lbl{gr:address}\\ (\lbl{gr:forest}, \lbl{gr:programs},\\ \lbl{gr:realization})};
+\node[box] (rlow) at (\xR,-2) {\lbl{rd:ring-lower}\\ $2j_h\ge4w+s(h)+s(hk)-C(E,A)$};
+\node[key] (eb) at (\xL,-4) {\lbl{pw:even-base}\\ rank 0: $s_2(E)=0\Rightarrow a(E)=0$};
+\node[box] (rc) at (\xM,-4) {\lbl{pw:rough-companion}: $k'(h)$\\ with $\omega(k')\le A$ (\S6, \lbl{nv:rough})};
+\node[box] (hc) at (\xR,-4) {\lbl{pw:height-comparison}\\ (Gross--Zagier via Cai--Shu--Tian)};
+\node[key] (ol) at (\xM,-5.9) {\lbl{pw:odd-lower}\\ $2j(P_h)\ge2w(h)+s(h)-C$};
+\node[box] (codd) at (\xL,-7.8) {\textbf{\S7 odd detector}\\ \lbl{co:kummer}, \lbl{co:theta-bridge},\\ \lbl{co:odd}};
+\node[box] (om) at (\xM,-7.8) {odd normalization (\lbl{co:minimum}),\\ stabilization (\lbl{pw:odd-stages}),\\ \lbl{pw:split-witness}};
+\node[key] (rmv) at (\xR,-7.8) {\lbl{rd:missing-vertex}\\ fixed-$K$ transfer};
+\node[key] (ob) at (\xM,-9.7) {\lbl{pw:odd-base}: fix $k$, two symbols\\ rank 1: $s_2(E)=1\Rightarrow a(E)=1$};
+\node[key] (thm) at (\xM,-11.5) {\lbl{thm:main}\\ (+ Gross--Zagier--Kolyvagin)};
+% solid edges
+\draw[ar] (cy) -- (pe);
+\draw[ar] (coev.south west) -- (pe.north east);
+\draw[ar] (gr.west) -- (pe.east);
+\draw[ar] (pe) -- (eb);
+\draw[ar] (pe.south east) -- (rc.north west);
+\draw[ar] (rl) -- (rlow);
+\draw[ar] (rlow.south west) -- (ol.north east);
+\draw[ar] (rc) -- (ol);
+\draw[ar] (hc.south west) -- (ol.east);
+\draw[ar] (ol) -- (om);
+\draw[ar] (codd) -- (om);
+\draw[ar] (om) -- (ob);
+\draw[ar] (rl.east) -- ++(0.35,0) |- (rmv.east);
+\draw[ar] (hc) -- (rmv);
+\draw[ar] (rmv.west) -- ($(ob.north east)+(0,-0.1)$);
+\draw[ar] (eb.west) -- ++(-0.35,0) |- (thm.west);
+\draw[ar] (ob) -- (thm);
+% dashed reuse edges
+\draw[dar] ($(gr.south west)+(0,0.1)$) -- ++(-0.3,0) |- ($(ob.west)$);
+\draw[dar] (coev.east) -- ++(0.3,0) |- ($(ob.east)+(0,-0.1)$);
+\end{tikzpicture}}
+\caption{Dependencies among the main statements. Shaded boxes are the main
+black boxes and the two conclusions. Dashed arrows mark reuse in the final
+step: the address lemma with two symbols, and the even symbol at $hk$. The
+cyclotomic lower bound also normalizes the even coefficients
+(\texttt{co:even-bound}).}
+\label{fig:deps}
+\end{figure}
+
+
+%======================================================================
+\section{Classical steps needing $p$ odd, and their replacements}
+\label{sec:replace}
+
+Every entry was checked against the source text. ``Sah's lemma'' is our name
+for the argument; the paper does not use the name.
+
+{\small
+\renewcommand{\arraystretch}{1.2}\begin{longtable}{@{}P{0.25\textwidth}P{0.49\textwidth}P{0.19\textwidth}@{}}
+\toprule
+Classical step & Replacement used here & Where \\
+\midrule
+\endhead
+$\tau$-eigenspaces $(1\pm\tau)/2$ &
+ Work with $(1+\tau)$-\emph{images}. For a crossed cocycle $b$ and an
+ exact-kernel element $u$, $b((\tau u)^2)=(1+\tau)b(u)$, and
+ $\operatorname{im}(1+\tau)$ is a rank-two coefficient module, also in
+ characteristic~$2$. A rank-two evaluation is selected by polarization of
+ the determinant quadric, which works in characteristic~$2$. Splitting
+ into signs happens only over characteristic-$0$ fields. &
+ \src{ring-limits}{931--939};\newline \lbl{rd:rank-two};\newline \src{ring-determinants}{666--688} \\
+$H^1(\Gal(K(E[2^n])/K),$\newline $E[2^n])=0$ &
+ Sah-type central scalar. Fix $g$ acting on $T$ by $u\cdot1$,
+ $u\in1+4\Z_2$, $u\ne1$; $z=g^2\tau g^2\tau^{-1}$ is ring-class trivial and
+ acts by $u^4$; $(u^4-1)b(g)=(g-1)b(z)$. Restriction to the exact kernel
+ is injective with a loss of fixed valuation. Descent obstruction and
+ ambiguity are killed by a fixed $2^e$, and $2^{2e}$ is paid \emph{once} for
+ all primes. &
+ \lbl{rl:kernel} \src{ring-limits}{731}; \src{ring-determinants}{235--258}; \src{coefficients}{220--230} \\
+Residual irreducibility (size bounds) &
+ A moving auxiliary character $\Psi=(1+t)^{\xi_i}$ at split primes $r_i$.
+ Over $\Omega=\F_2((t))$ the nonconstant scalar makes the local tests acyclic
+ and kills global invariants, so residual Selmer ranks are bounded
+ independently of the active primes. &
+ \lbl{rl:characters}, \lbl{rl:local-acyclic}, \lbl{rl:residual-bound} \\
+Residual irreducibility (rank reduction) &
+ An ultraproduct $\cO_\infty=\prod_{\mathcal U}\cO_j/\mathfrak a$, a DVR with
+ uniformizer $2$ and \emph{characteristic-$0$} fraction field, where
+ $T$ is absolutely irreducible via a finite spanning witness. A hypothetical
+ sequence of unbounded losses becomes a characteristic-$0$ rank reduction. &
+ \lbl{rl:outer-evaluation}, \lbl{rl:irreducibility}, \lbl{rd:outer-bound} \\
+Residual control, cyclotomic side &
+ Ferrero--Washington $\mu=0$ bounds class-group $2$-ranks in the real
+ cyclotomic tower. Units with odd-augmentation signature (from
+ $\epsilon=1+\zeta+\zeta^{-1}$, $N(\epsilon)=-1$) make the signature map
+ surjective. Then $C^+_S\otimes\cO[G]\simeq\cO[G]^2[-1]$. &
+ \lbl{cy:residual} \src{cyclotomic}{245--311} \\
+Real places (Nekov\'a\v{r}'s (P)) &
+ Ring class: $K$ is imaginary quadratic, so (P) holds and complex places
+ give zero Tate complexes. Cyclotomic: the positive complex
+ $C^+_S=\mathrm{Cone}(R\Gamma(G_{\Q,S},\mathbb T)\to R\Gamma(\R,\mathbb T))[-1]$,
+ an explicit real-place class $a$, and $2z_S$ lifted because
+ $H^1(\R,\mathbb T)$ is killed by $2$. &
+ \src{ring-limits}{182, 242, 399}; \lbl{cy:perfect}; \src{cyclotomic}{599--609} \\
+Kato 12.5(4) (integral) &
+ Kato 12.5(3) (rational, over $\Lambda[1/2]$, characterwise). One fixed
+ modular-form lattice for all traces gives $2^{C_{\rm int}}u\in\cO[G]$, and
+ then $\cO\cap\Lambda[1/2]=\Lambda$ (\lbl{cy:fourier}). &
+ \src{cyclotomic}{423--438, 597--627} \\
+Kolyvagin primes: $p^n\mid\ell+1,a_\ell$ &
+ The derivative reduction is $\frac{\ell(\ell+1)}2F_\ell\widetilde X$, so
+ one requires $v_2(\ell+1)\ge a+1$ for vanishing mod $2^a$. &
+ \src{ring-determinants}{361--378} \\
+Isotropy of local planes (skew-symmetry) &
+ Impose $\ell^2\equiv1\pmod{2^{a+1}}$: then $-1$ is a $2^a$-th power and
+ $(x,x)=(x,-1)=0$ for the $2^a$-Hilbert symbol. The pure squares vanish
+ exactly, so the isotropy homotopies can be taken to be zero. &
+ \lbl{rd:local-model} \src{ring-determinants}{99--133, 414--419} \\
+Primitive localization in each switch &
+ Exact determinant switch over a DVR: $v(u_F)=v(u_S)$ even when the
+ localized class is divisible by $2$, so no loss per switch. &
+ \lbl{rd:det-switch} \src{ring-determinants}{473} \\
+Ordinary/Greenberg conditions at $p$ &
+ The integral Kummer condition $M_F[-1]\to R\Gamma(F,T_2B)$, including the
+ derived degree-zero torsion, is self-orthogonal at $F\mid2$ for every
+ reduction type. &
+ \lbl{rl:kummer} \src{ring-limits}{285} \\
+Smoothing factors $(c^2-c\sigma_c)$ &
+ $c,d\equiv1+2^e\pmod{2^{e+1}}$ make the factor a unit of $\cO[G]$ with
+ central valuation exactly $e$. &
+ \src{cyclotomic}{363--389} \\
+Inertia projector $(1+g_q)/2$ at each unused prime &
+ Integral units $U_q=1+\frac{r_q-1}2(1+g_q)$ and
+ $\eta=\prod_q\bigl(1+\frac{l_q/e_q^2-1}{2}(1+g_q)\bigr)$, using
+ $P_q(Z)-Z^2P_q(Z^{-1})=\frac{q-1}q(1-Z^2)$ and
+ $(1+az+z^2)(1+az^{-1}+z^{-2})\equiv(a+z+z^{-1})^2\pmod2$. &
+ \lbl{cy:euler-convention}; \lbl{rd:unused}, \lbl{rd:eta} \\
+$\Sha$ over $K$ vs.\ $\Q$ by $\pm$-parts &
+ The Cassels--Tate isogeny identity for $\mathrm{Res}_{K/\Q}E^{(h)}$ vs
+ $E^{(h)}\times E^{(hk)}$ (composites $=2$) gives a length identity with
+ $\sum_{p\mid k}t_p$. &
+ \src{ring-determinants}{1121--1190} \\
+Indivisibility / Kolyvagin's conjecture &
+ No indivisibility is assumed. Binary symbols from half-integral weight
+ coefficients plus prime networks (\S8) produce the nonzero vertices
+ with uniform bounds. &
+ \lbl{co:symbol-interface}, \lbl{gr:address} \\
+\bottomrule
+\end{longtable}}
+
+%======================================================================
+\section{Notation}
+\label{sec:notation}
+
+{\small
+\renewcommand{\arraystretch}{1.2}\begin{longtable}{@{}P{0.19\textwidth}P{0.55\textwidth}P{0.2\textwidth}@{}}
+\toprule
+Symbol & Meaning & Defined \\
+\midrule
+\endhead
+$T,V$ & $T_2E$, $T\otimes\Q_2$ & \src{cyclotomic}{6} \\
+$s_2(A)$; $s(h)$ & Selmer corank; $\length_{\Z_2}\Sha(E^{(h)})[2^\infty]$ (finite) & \src{preliminaries}{7, 104} \\
+$p^*$; $h$ & $(\frac{-1}p)p$; squarefree products of $p^*$, $h=1$ allowed & \src{preliminaries}{88--95} \\
+$t_p$; $w(h)$ & $\dim_{\F_2}E[2]^{\Fr_p}\in\{1,2\}$; $\frac12\sum_{p\mid h}t_p$ & \src{preliminaries}{97} \\
+$L_*(h)=\cL(h)$ & $\sqrt{|h|}L(E^{(h)},1)/\Omega_E^{\mathrm{sgn}\,h}$ & \src{cyclotomic}{17} \\
+$D(h)$ & $v_2(\cL(h))-2w(h)-s(h)$ & \src{cyclotomic}{27} \\
+filter & real sign and unit squareclasses at a support $S\supseteq\{p\mid2N\}$ & \src{preliminaries}{80} \\
+$x$, $h_x$, $\lambda_q$ & address in $\F_2^b$; cube member; activation form & \src{cyclotomic}{50} \\
+$G$, $g_q$ & $(\Z/2)^b$; inertia bit $g_q(x)=(-1)^{\lambda_q(x)}$ & \src{ring-determinants}{1218} \\
+$\Lambda,\cO,\Omega$ & $\Z_2[[t]]$; $2$-adic completion of $\Lambda_{(2)}$; $\cO/2=\F_2((t))$ & \src{cyclotomic}{67} \\
+$C^+_S(\mathbb T)$, $a$, $u$ & positive complex; real-place class; $a\wedge\widetilde{2z_S}=u\mathbf e$ & \src{cyclotomic}{188, 196, 607} \\
+$C_{\rm int},C_{\rm loc}$ & uniform denominator; central comparison constant & \src{cyclotomic}{83--88} \\
+$K=\Q(\sqrt k)$ & imaginary quadratic, split at $2N$; not $\Q(i)$, $\Q(\sqrt{-3})$ or the CM field & \src{ring-limits}{14} \\
+$P_h$ (\S4) & ring-class sum $\sum_\sigma\chi_h(\sigma)\sigma(y_{|h|})$ over $K$; index $j_h$ or $j_h(k)$ & \src{ring-limits}{28} \\
+$P_D$ (\S7) & genus-character sum over $K_D=\Q(\sqrt{Dh_*})$, conductor $1$; index $j(P_D)$ & \src{coefficients}{169} \\
+$h_*,\,k'(h),\,k$ & detector partner; varying bounded companion; fixed final companion & \S\ref{sec:arch} \\
+$A_i$, $r_i$, $\xi_i$, $\Psi$ & $(\Z/2^i)[t]/(t^i)$; moving split prime; character of order $2^{n_i}$; $(1+t)^{\xi_i}$ & \src{ring-limits}{111, 407, 536} \\
+$\ell$, $f(c)$, $s(c)$ & derivative (inert) prime; finite coordinate $c(\gamma^2)$; singular coordinate $c(\sigma)$ & \src{ring-determinants}{65--79} \\
+$\cD(C)$; $u_I$ & inverse determinant $\bigotimes(\det C^i)^{(-1)^{i+1}}$; coordinate of $[P_I]\otimes[\lambda_I]$ & \src{ring-determinants}{31, 455} \\
+$\cO_\infty$ & ultraproduct DVR, char.\ $0$ fraction field & \src{ring-limits}{790} \\
+$F,F'$ & $\Q(E[2])$, $\Q(E'[2])$ for a $2$-isogeny $E\to E'$ & \src{pointwise}{129} \\
+split/simple & split in $F$ (weight $1$) / inert in $F$ (weight $\frac12$); \emph{good} simple if also inert in $F'$ & \src{coefficients}{17}; \src{pointwise}{132} \\
+$\delta$, $A(D)$ & minimum normalized depth; binary symbol ($1$ iff $v(a(D))=\delta+w(D)$) & \lbl{co:minimum} \\
+$B_U,H_U,\Theta_J$ & divided operators, unary-corrected form, unary theta & \src{coefficients}{646--697} \\
+$t(u),d(u)$ & trace and determinant operators on the coefficient lattice & \src{coefficients}{786} \\
+$\Delta_z$ & finite difference $f|_{z=0}+f|_{z=1}$ in a residue bit & \src{graphs}{184} \\
+\bottomrule
+\end{longtable}}
+
+\noindent\emph{Warning.} The letter $P_h$ is used both for the ring-class sum
+(\S4) and, in the introduction and \S9, for the genus sum $P_D$ of~\S7. The
+indices are written $j_h(k)$ and $j(P_h)$ respectively
+(\lbl{pw:height-comparison} makes the distinction explicit).
+
+%======================================================================
+\section{Section-by-section guide}
+\label{sec:walk}
+
+Headings refer to the \emph{paper's} sections. For each we give (a) the
+main statements, (b) the idea, (c) the key computation, and (d) what a
+referee should check.
+
+\subsection*{\S2 Preliminaries \hfill \src{preliminaries}{1--151}}
+(a) \lbl{pr:ranks}: $s_2=r+\corank\Sha[2^\infty]$, and analytic rank $\le1$
+gives $r=a$ and $\Sha$ finite. \lbl{pr:invariance}: $(-1)^{s_2(A)}=
+\varepsilon(A)$ (Monsky \cite{Monsky1996}; Dokchitser--Dokchitser
+\cite{DokchitserDokchitser2010}); isogeny invariance; and
+$s_2(A/K)=s_2(A)+s_2(A^{(k)})$, proved with $1\pm c$ only after
+rationalization.
+(b) These fix the corank bookkeeping. (d) Check that the quadratic identity
+is used only as a corank identity (the paper says so at
+\src{preliminaries}{76}). Read the ledger at lines 127--151.
+
+\subsection*{\S3 Cyclotomic interpolation \hfill \src{cyclotomic}{1--788}}
+(a) \lbl{cy:lower-bound}: $v_2(\cL(h))\ge2w(h)+s(h)-C_E$ whenever
+$L(E^{(h)},1)\ne0$, uniformly in the number and size of the primes of $h$.
+\lbl{cy:missing-vertex}: as in Section~\ref{sec:mv} of this guide, with conclusion
+$L(E^{(h_0)},1)\ne0$ and $D(h_0)\le B+C_E$.
+
+(b) \emph{The object.} Work over $R=\Lambda[G]$ with
+$\mathbb T=T\otimes R$, twisted by $\chi_{h_0}$, by the universal quadratic
+character $\psi:G_\Q\to G$, and by the inverse cyclotomic character. One
+complex carries all $2^b$ twists and the cyclotomic variable. After base
+change to the local ring $\cO[G]$, whose residue field is $\F_2((t))$, the
+positive complex is \emph{free of rank two in degree one}
+(\lbl{cy:residual}). Its determinant is therefore a free rank-one module,
+and the scalar $u$ defined by $a\wedge\widetilde{2z_S}=u\mathbf e$ is a
+single element of $R[1/2]$ whose characters are the twists. The real-place
+class $a$ is the extra generator that makes the rank $2$; it is present
+because $\Q$ has a real place.
+
+\emph{Why two coefficient rings.} The ring $\cO=\widehat{\Lambda_{(2)}}$ is a
+DVR with residue field $\F_2((t))$, so $\cO[G]$ is local and every element
+with nonzero image in $\F_2((t))$ is a unit. This is what makes the free
+model have rank exactly $2$, independently of $b$ and of the support. But
+$\cO$ has no evaluation $t=0$ (\src{cyclotomic}{71--75}): an element of
+$\cO$ is, modulo $2^M$, a Laurent series with finite negative part. Central
+values must therefore be read in $\Lambda[1/2]$. Lemma \lbl{cy:fourier} is
+the bridge: an element that is integral over $\cO$ and characterwise in
+$\Lambda[1/2]$ is integral over $\Lambda$, with no loss depending on $|G|$.
+
+(c) Key computations.
+\begin{itemize}
+\item \emph{Two-sided integrality.} Kato's classes (8.1.2--8.1.3), traced
+ through one fixed form lattice and pushed along
+ $[\sigma]\mapsto\chi_{h_0}(\sigma)[\sigma|_{\Gamma_n}][\psi(\sigma)]$
+ (\lbl{cy:coefficient-map}), give $2^{C_{\rm int}}u\in\cO[G]$ with no
+ division by $|G|$. Kato 12.5(3) with Euler corrections gives
+ $u_x\in\Lambda[1/2]$ for each character (\lbl{cy:rational-membership}).
+ \lbl{cy:fourier} then gives $2^{C_{\rm int}}u\in\Lambda[G]$.
+\item \emph{Central formula} (\lbl{cy:central}). The integral Poitou--Tate
+ sequence gives $\length H^2=s-i+\sum_q\length H^0(\Q_q,A_h)+O(1)$
+ (\lbl{cy:pt-length}). The index $i$ cancels. Unused good primes give
+ $v_2\#E^{(h_x)}(\F_q)$, which cancels the imprimitive Euler factors in
+ Kato's reciprocity (\lbl{cy:reciprocity}). Active primes give exactly
+ $t_q$, summing to $2w(h_x)$.
+\item \emph{Bad primes.} The correct local block is $H^1(I_q,V_h)$, not
+ $V_h^{I_q}(-1)$ (\src{cyclotomic}{486--498}; the split multiplicative
+ example is worth reading).
+\end{itemize}
+
+(d) Referee checks: the rational comparison (\lbl{cy:rational-comparison},
+derived at \src{cyclotomic}{523--537}), which is \emph{sketched}. The
+argument is that two rank-one Iwasawa classes agree at infinitely many
+finite-order characters, and then Weierstrass preparation. Check the
+uniformity of $C_{\rm int}$ in $S,h_0,G,b$ (\src{cyclotomic}{620--622}), and
+the choice of $c,d$ in unsmoothing (Kato 8.1.2 needs $\mathrm{prime}(cd)\cap
+S=\emptyset$; taking $c,d$ prime suffices). Also check Ferrero--Washington at
+$p=2$ for the real cyclotomic tower in \lbl{cy:residual}.
+
+\subsection*{\S4 Ring-class infrastructure \hfill \src{ring-limits}{1--981}}
+(a) Statements of the two outputs, \lbl{rd:ring-lower} and
+\lbl{rd:missing-vertex} (lines 42--89). These are followed by the
+construction lemmas, packaged in \lbl{rl:limit-evaluation-package}
+(line 941).
+
+(b) \emph{What object is being built, and why limits.} We want a perfect
+Selmer complex over $\Lambda=\Z_2[[t]]$ for $T\chi_h\Psi$, where $\Psi$ is a
+``ring-class Iwasawa variable'' at an auxiliary split prime. Its specialization
+$t=0$ should be the Kummer Selmer complex of $E^{(h)}/K$, and its residual
+fiber over $\F_2((t))$ should have bounded size. (Our gloss, not a sentence of the paper: ring-class
+extensions of $r$-power conductor have finite $2$-part, and the
+anticyclotomic $\Z_2$-extension ramifies above $2$, where $\Psi$ is required
+to be trivial.) The paper therefore uses,
+at precision $i$, a \emph{different} prime $r_i$ with a character $\xi_i$
+of order $2^{n_i}\to\infty$ (\lbl{rl:characters}), and coefficients
+$A_i=(\Z/2^i)[t]/(t^i)$. The finite complexes for different $i$ form no
+inverse system. However, \lbl{rl:finite-model} gives bounded free models with
+explicit contractions $(\iota_i,p_i,h_i)$ to the actual cochains, and
+$A_i$ is finite at each fixed precision. A nonprincipal ultrafilter therefore
+selects entrywise limits of all matrices, including homotopies and duality
+data (\lbl{rl:finite-limits}).
+
+Two subtleties drive the length of the section. First, a limit cycle
+need not lift to a genuine finite cycle, and one needs \emph{actual} Galois
+cocycles in order to evaluate at Frobenius. This is the job of
+\lbl{rl:evaluation}: evaluation matrices $e^1_{g,i}$ are kept for
+\emph{every} sequence $g=(g_i)\in\prod_iG_K$, with the cocycle identities
+\lbl{rl:eval-boundary}--\lbl{rl:eval-cocycle}. Second, ring-class fields of
+unbounded degree are never objects of the limit. Descent, Shapiro transfer
+and coset sums are done at each finite stage, and only target-side data on
+$K$ are retained (``Target-side data'', \src{ring-limits}{219--281}).
+
+The \emph{outer} limit (\lbl{rl:outer-evaluation}) is a compactness device.
+If losses at $(2)$ were unbounded along a sequence of instances with
+bounded model size, the ultraproduct DVR $\cO_\infty$ (characteristic $0$)
+would carry a limiting complex on which the characteristic-$0$ rank
+reduction of \S5 runs, and this gives a contradiction.
+
+Schematically (our notation; the top row is the inner limit for one
+instance, the bottom row the outer limit over instances $j$):
+\[
+\begin{tikzcd}[column sep=2.4em,row sep=1.8em]
+\bigl\{(C_i,d_i,\iota_i,p_i,h_i,e^1_{g,i},\dots)\bigr\}_i\ \text{over } A_i
+ \arrow[r,"\lim_{\mathcal U}"] &
+ C\ \text{over }\Lambda \arrow[d,"{\text{instance } j:\ \otimes\cO_j}"]\\
+C_\infty\ \text{over }\cO_\infty &
+ \{C_j\}_j\ \text{over }\cO_j \arrow[l,"\prod_{\mathcal U}/\mathfrak a"']
+\end{tikzcd}
+\]
+All matrices have bounded size. Every asserted identity (chain map,
+homotopy, duality, cocycle relation) is a finite polynomial identity among
+their entries, so it passes to the limit. What does \emph{not} pass
+automatically is the existence of the finite-level arithmetic data. These
+must be constructed simultaneously at every stage, with one fixed ultrafilter
+and the same original stages when new derivative primes are added. This is
+exactly where the audit's Gap~1 lies.
+
+(c) Key points. \lbl{rl:kummer}: integral Kummer conditions at $2$ keep
+$B(F)[2^n]$ in derived degree $0$. \lbl{rl:local-acyclic}: at $r$, inertia
+minus one is $t\cdot$unit, and at active split primes Frobenius is $zB$ with
+$z=(1+t)^a$, $a$ odd, so it is nonconstant over $\F_2((t))$.
+\lbl{rl:kernel}: the central element $z=g^2\tau g^2\tau^{-1}$.
+\lbl{rl:chebotarev-evaluation}: derivative primes with Frobenius $\tau u$,
+evaluating at $(\tau u)^2$; then $a_\ell\to0$ and $\ell\to-1$.
+
+(d) Referee checks: (i) the ``Target-side data'' paragraph and
+\lbl{rl:limit-evaluation-package} (lines 219--281 and 941--981) are written
+as checklists pointing to sketched constructions (Audit Gap~1). (ii) In the
+Kummer orthogonality of \lbl{rl:kummer} (lines 320--341), the nullhomotopy is
+asserted, not exhibited (Gap~2). (iii) Check that one fixed ultrafilter and
+the same original stages are used after every new switch
+(\src{ring-limits}{206--216}; \src{ring-determinants}{397--404}). (iv) Check
+the uniform constant $c_E$ in \lbl{rl:trace-bound}, including the CM case
+with $\chi_{\rm cyc}(\gamma)=625$.
+
+\subsection*{\S5 Switches, determinants, transfer \hfill \src{ring-determinants}{1--1769}}
+(a) \lbl{rd:derivative}: an integer $L\ne0$, independent of the number of
+primes, such that Heegner derivative classes satisfy $f(P_{I\cup\ell})=0$ and
+$s(P_{I\cup\ell})=Jf(P_I)$. \lbl{rd:det-switch}: the valuation is
+invariant under a switch. \lbl{rd:away-two}: the coordinate lies in
+$\Lambda[1/2]$. \lbl{rd:outer-bound}: $v_{(2)}(u)\ge-C(E,A)$.
+\lbl{rd:central-formula}:
+\[
+ v(u_h(0))=2j_h-s(h)-s(hk)-4w(h)+O_{E,A}(1).
+\]
+\lbl{rd:family-clearing}: a clearing factor with bounds independent of
+$b,\#Q$. \lbl{rd:missing-vertex} is proved at line 1701.
+
+(b) The determinant coordinate $u_I$ pairs the Heegner class with its own
+dual functional $\lambda_I$, obtained from global duality through local
+contractions. Hence its central value is $2j_h$ (point and functional each
+contribute $j_h$) minus the torsion lengths. A Kolyvagin switch at an inert
+$\ell$ replaces the finite plane by the singular plane and preserves
+$v(u)$ exactly. Repeated switches lower the Selmer dimension of a test fiber,
+by two at each rank-two switch (a one-sign fiber first needs one preparatory
+switch), until a $1\times1$ model makes the coordinate visibly integral. The terminal minor estimate \lbl{rd:minor},
+$u_i=\pm\alpha_i\beta_i/\det A_i$, then bounds the loss.
+
+(c) Key computations. Kolyvagin's local formulas at $2$ (lines 300--378):
+$f=(a_\ell F_\ell-(\ell+1))\widetilde Q$,
+$s=(a_\ell-(\ell+1)F_\ell)\widetilde Q$, and the identity
+$(F_\ell-a_\ell)(a_\ell F_\ell-(\ell+1))=a_\ell-(\ell+1)F_\ell$, so
+$s=(F_\ell-a_\ell)f$. The half factor needs $v_2(\ell+1)\ge a+1$. In the
+determinant switch, the vector $v_0=2^de_1$ is paired with the fractional
+$2^{-d}e_2$: unit volume, with no integral complement needed
+(lines 553--564). The central trace at $r_i$ is $m_i=a_{r_i}-2\chi_h(r_i)$,
+with $v_2(m_i)\le c_E$. The $\Sha$ comparison
+\lbl{rd:sha-comparison} gives
+$\length\Sha(E^{(h)}/K)[2^\infty]=s(h)+s(hk)+\sum_{p\mid k}t_p+O_E(1)$.
+
+For the family: the universal trace class is built over $A_i[G]$
+\emph{before} character evaluation. Unused primes are removed by $\eta$, and
+the new local blocks (residual $t$-order at most $4$) are eliminated by Schur
+complements with uniform Laurent pole bounds (\lbl{rd:schur}). This gives
+$f$ with $v(f_0(0))\le c_*$ and poles $\le L(M)$.
+
+(d) Referee checks: \lbl{rd:assembly} (lines 1542--1604) is the main
+\emph{sketched} assembly (Gap~1). Its hypotheses ``single simultaneous
+construction'' (lines 767--770) are exactly what the infrastructure must
+deliver; the paper's own Remark \lbl{rd:interface-status} stresses this.
+Re-derive \lbl{rd:det-switch} and the half-factor step yourself (our audit
+did). Check that Howard is used only as a pattern (lines 407--408, 641):
+his odd-prime hypotheses are never invoked. The base step uses Gross--Zagier
+at $h=1$ via Cai--Shu--Tian (line 1732). The analogous citation at
+\src{ring-limits}{33} should also point to Cai--Shu--Tian with $c=|h|$
+(audit minor note).
+
+\subsection*{\S6 Auxiliary twists \hfill \src{nonvanishing}{1--425}}
+(a) \lbl{nv:local-witness}: in any filter of root number $\pm1$ there are
+$d$ with $L$ or $L'\ne0$, avoiding any finite set. \lbl{nv:rough}: in the
+$+1$ case one can also require $\omega(d)\le A_0$ with $A_0$
+\emph{absolute}.
+(b) A first moment in a fixed progression with an imposed divisor $b$,
+$S_{0,b}(X)=cX\prod_{p\mid b}\beta_p+O(b^BX^{1-\eta})$ (\lbl{nv:moment}),
+has nonnegative terms by Waldspurger. A lower linear sieve
+\cite[Thm.~11.13]{FriedlanderIwaniec2010} then gives almost-prime $d$,
+following Hoffstein--Luo \cite{HoffsteinLuo1997}.
+(c) Absolute exponents: the Poisson identity \lbl{nv:poisson}; explicit
+local Gauss sums $G_\nu(p^r)$; the bound $(C_0C_1)^{\omega(J\nu)}\le(2J|\nu|)^C$.
+(d) The Poisson and omitted-factor steps are compressed (Gap~2). Check that
+the factor bound $A_0$ does not depend on the curve: it is applied to
+absorbed curves $E^{(h\cdot\text{dummy})}$ in \lbl{pw:rough-companion}.
+
+\subsection*{\S7 Coefficient systems \hfill \src{coefficients}{1--1028}}
+(a) \lbl{co:even} (even system and exact ratio); \lbl{co:kummer} and
+\lbl{co:theta-bridge}: for $\ell$ with $\rho_T(\Fr_\ell)\equiv C\pmod{2^M}$,
+$(h_*/\ell)=-1$, $(D_w/\ell)=1$ (hence $\ell\equiv-1\bmod2^M$),
+\[
+ a_M(D)\equiv c_0\,2^{\omega(N)}\zeta_M(D)\,\lambda_M\bigl(\mathrm{red}_\ell(LP_D)\bigr)\pmod{2^M}.
+\]
+\lbl{co:odd}: $v(a_M(D))\ge\min\{M,j(P_D)-C\}$, and a visible coefficient
+bounds $j(P_D)$. Then \lbl{co:minimum}, \lbl{co:operators}, \lbl{co:traces},
+\lbl{co:inertia}, and the \lbl{co:symbol-interface}.
+
+(b) Even side: in one squareclass, Waldspurger's comparison is an
+\emph{equality} of squares, so valuations are exact, with no product of local
+factors over the new primes. Odd side: a weighted ternary theta series on the
+definite quaternion algebra ramified at $\ell,\infty$. Its Schwartz function
+carries local weights: a selected-root character at level primes,
+$\epsilon_p$ on nilpotent orbits at $p\mid h_*$, and a residue-line character
+at $\ell$. Its $|h_*|D$-coefficients count optimal embeddings weighted by the
+genus character, which reproduces $\lambda_M$ of the reduced genus sum.
+After normalization by the minimum depth $\delta$, coefficients become
+\emph{bits}. Divided operators $B_U$ and unary-corrected $H_U$ turn Hecke
+traces at fresh primes into tests of single bits (``fresh-prime testing'').
+
+(c) The contraction identity (\lbl{co:contraction}). Changing one oriented
+ramification bit at $p\in U$ changes the symbol by $A((U\setminus p)\cup q')$
+with $\Fr_{q'}\sim g\phi_p$: two prime labels merge, and the
+\emph{whole} rational prime $p$ is omitted. Two simple vertices give zero.
+The good-twin rule: inserting two simple primes with equal labels preserves
+the symbol when $\#E(\F_q)/2$ is odd.
+
+(d) Referee checks: lattice preservation by $t(u),d(u)$ (via Chebotarev
+approximation by $T_q$, $q\langle q\rangle$) and the derivation of
+$H_U[q^2]$ (lines 793--849, 1000--1020) are sketched (Gap~2). Also check the
+Waldspurger hypotheses (H1), (H2) (lines 93--95), and that the odd
+normalization is \emph{conditional} until \lbl{pw:odd-lower} (lines 566--583).
+
+\subsection*{\S8 Arithmetic graphs \hfill \src{graphs}{1--646}}
+(a) \lbl{gr:realization}: any prescription of independent residue bits
+involving new vertices is realized by fresh primes (ray classes, Hilbert
+reciprocity fixes the reverse bits); product clusters can be replaced by
+single primes. \lbl{gr:address} (line 199): given terminals with nonzero
+terminal polynomials at each $x\ne0$, for one or two symbols, one can adjoin
+primary auxiliaries, absent at $0$, so that every symbol equals $1$ at every
+$x\ne0$.
+
+(b) Differentiating in an edge bit contracts that edge (the symbol
+interface). Trees therefore contract, and cycles differentiate to zero
+(\lbl{gr:forest}). A network of auxiliary vertices acts on the terminal
+polynomial by a sum of contraction operators. By the all-minors matrix-tree
+theorem the constant term is $\det Q$ and the pair-contraction term is
+$c_a^{\mathsf t}\adj(Q)c_b$ (\lbl{gr:network}), where $Q$ is the grounded
+Laplacian over $\F_2$.
+
+(c) \lbl{gr:programs} builds networks in $b$ groups of three vertices
+activated by a basis $\lambda_i$ with $\lambda_i(x_*)=1$. These are present
+together only at $x_*$. The form $H(T,B)=\bigl(\begin{smallmatrix}0&T\\
+T^{\mathsf t}&B\end{smallmatrix}\bigr)$ uses $T=I+P$ (cyclic shift) for the
+``singular'' program, or $T=I+L$ for the pair $\mathcal N^{(\varepsilon)}$.
+For two symbols, the top parts are multiplied in the polynomial ring (not
+the Boolean ring) and the sum over $\varepsilon$ is shown to be $1$
+(lines 559--625).
+
+(d) Our audit brute-forced the combinatorics (400 random graphs, about 200
+full runs of \lbl{gr:address}, 0 failures). The referee should focus on the
+arithmetic input: that the symbols really satisfy whole-prime omission
+and primary isolation (\S7 and \S\S9.5--9.6). Note the closing caveat
+(lines 637--646): this section proves no uniformity in $b$.
+
+\subsection*{\S9 Assembly \hfill \src{pointwise}{1--1058}}
+(a) \lbl{pw:interfaces}; \lbl{pw:partitionable-even}; \lbl{pw:even-base};
+\lbl{pw:rough-companion}; \lbl{pw:height-comparison}; \lbl{pw:odd-lower};
+\lbl{pw:split-witness}; \lbl{pw:odd-base}; the proof of \lbl{thm:main}
+(line 1029).
+
+(b) Isogeny orientation: use a full-$2$-torsion curve in the isogeny class
+if there is one; otherwise $F,F'$ are quadratic and ``good simple'' primes
+have $\#E(\F_p)\equiv2\bmod4$ (\lbl{pw:good-simple}). Seeds, reserves and
+neutral packets (lines 149--274) are finite label combinatorics. They show
+that a long list of terminal primes can be contracted to a minimum seed
+plus good twin pairs, so the terminal polynomial is nonzero. One packet is
+put on every nonzero linear form of $\F_2^b$. The odd symbol is stabilized
+along an ultrafilter of precisions $M$ (lines 499--549); an actual stage is
+chosen only after $b$ and the networks.
+
+(c) The full-$2$-torsion case needs an extra argument
+(\lbl{pw:split-witness}). After restricting to $K$-split primes the even
+minimum might sit only at the empty configuration. The paper shows
+$a_p(E^{(k)})\equiv p+1\pmod8$ for split $p$, divides once more by $2$
+(\lbl{pw:four-divided-form}), and finds a nonempty witness from a prime inert
+in $K$ and trivial on $E[8]$. The orientation correction
+\lbl{pw:coinvariants} uses $\mathrm{ann}((V_0^*)^c)=(1+c)V_0$.
+
+(d) Check the order of choices in \lbl{pw:odd-base}: $k$ is fixed before
+$b$, and $\ell$ eventually avoids $k$. Check the final inequality
+$2j_h(k)\le4w(h)+C$ (line 1017). The audit notes that
+\lbl{pw:split-witness} should state that $k$ is a square at $2N$.
+
+%======================================================================
+\section{Worked examples}
+\label{sec:examples}
+
+\subsection{A cube for $E=$ 14a1}
+Take $E:\ y^2+xy+y=x^3+4x-6$, conductor $14$, $E(\Q)_{\rm tors}\cong\Z/6$, so
+$E(\Q)[2]=\Z/2$. Its discriminant is $-21952=-2^6\cdot7^3$, so
+$F=\Q(E[2])=\Q(\sqrt{-7})$ and $t_q=2$ iff $(\frac{-7}q)=1$. With PARI
+(computation ours) we get $L(E,1)/\Omega^+_E=1/6$, so $v_2(\cL(1))=-1$; this
+matches BSD with $c_2c_7=6$ and $\#E(\Q)_{\rm tors}=6$.
+
+The filter of $h_0=1$: $d>0$, $d\equiv1\bmod8$, $(\frac d7)=1$. A cube with
+$b=2$ uses $\lambda_{-3}=\lambda_{-19}=x_1$ and $\lambda_5=\lambda_{13}=x_2$:
+\[
+ h_{00}=1,\quad h_{10}=57=(-3)(-19),\quad h_{01}=65=5\cdot13,\quad
+ h_{11}=3705.
+\]
+All four lie in the filter.
+
+\emph{What to expect (heuristic, assuming BSD; not used anywhere).} For a
+rank-$0$ twist, BSD writes $\cL(h)$ as $\#\Sha\cdot\prod_pc_p$ over torsion,
+times period comparisons. At an active prime $p\mid h$ the twist has
+additive reduction, and the $2$-part of $c_p$ is $2^{t_p}$ (the paper uses
+this at \src{ring-determinants}{1170--1178}). Up to bounded local factors at
+$2N$, one expects $v_2(\cL(h))=2w(h)+s(h)+O(1)$, i.e.\ $D(h)=O(1)$.
+Theorem \lbl{cy:lower-bound} proves the lower half of this without BSD. The table lists $\cL(d)=\sqrt d\,L(E^{(d)},1)/
+\Omega^+_E$ and $s_{\rm an}=v_2$ of the BSD-predicted order of $\Sha$
+(analytic; it is \emph{not} a theorem input).
+
+\begin{center}\small
+\begin{tabular}{@{}rlrrrrr@{}}
+\toprule
+$d$ & factors & $\cL(d)$ & $v_2(\cL)$ & $2w(d)$ & $s_{\rm an}$ & $D(d)$ \\
+\midrule
+$1$ & --- & $1/6$ & $-1$ & $0$ & $0$ & $-1$ \\
+$57$ & $(-3)(-19)$ & $6$ & $1$ & $2$ & $0$ & $-1$ \\
+$65$ & $5\cdot13$ & $6$ & $1$ & $2$ & $0$ & $-1$ \\
+$3705$ & $(-3)\cdot5\cdot13\cdot(-19)$ & $24$ & $3$ & $4$ & $0$ & $-1$ \\
+\midrule
+$305$ & $5\cdot61$ & $54$ & $1$ & $2$ & $0$ & $-1$ \\
+$1241$ & $17\cdot73$ & $24$ & $3$ & $2$ & $2$ & $-1$ \\
+$1649$ & $17\cdot97$ & $96$ & $5$ & $2$ & $4$ & $-1$ \\
+$1817$ & $(-23)(-79)$ & $96$ & $5$ & $4$ & $2$ & $-1$ \\
+$2937$ & $(-3)(-11)\cdot89$ & $96$ & $5$ & $4$ & $2$ & $-1$ \\
+$473$ & $(-11)(-43)$ & $0$ & --- & $4$ & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+In the filter, among the $46$ products $d\le4000$ of at most three signed
+primes below $100$ (other than $2,7$; the empty product included), $36$ have $\cL(d)\ne0$, and all $36$ have $D(d)=-1$
+(with $s=s_{\rm an}$). This is consistent with \lbl{cy:lower-bound} and
+with the shape of \lbl{cy:central}, where all varying contributions to
+$v_2(\cL)$ are $2w+s$. Without $s$, $v_2(\cL)-2w$ takes the values $-1,1,3$,
+as in the audit's $138$-twist check. \emph{In words:} the active primes
+contribute exactly $t_q$ each, and $\Sha$ the rest, up to a constant. The
+uniform bound $B=-1$ at the three nonzero vertices of the cube is the kind
+of input \lbl{cy:missing-vertex} needs. (Here the base is known anyway; the
+theorem needs arbitrarily large $b$, built by \S8.)
+
+\subsection{The smallest address network}
+The paper's concrete instance (\src{graphs}{435--454}): $b=1$, target $x_*=1$,
+two always-active split terminals $a_0,a_1$ with selected bit $z$, and three
+primary vertices $1,2,3$ activated by $x$. The program gives the path
+\[
+ a_0 - 1 - a_1 - 3 - 2,\qquad
+ Q=\begin{pmatrix}0&0&0\\0&1&1\\0&1&0\end{pmatrix},\quad
+ c_{a_0}=\begin{pmatrix}1\\0\\0\end{pmatrix},\quad
+ c_{a_1}=\begin{pmatrix}1\\0\\1\end{pmatrix}.
+\]
+We checked by enumeration: (i) $Q$ is the grounded Laplacian over $\F_2$ of
+this path; (ii) the forests with exactly one terminal per component are the
+two obtained by deleting $a_0\!-\!1$ or $1\!-\!a_1$, so $\det Q=2\equiv0$;
+(iii) the only forest joining $a_0,a_1$ with all vertices covered is the
+whole path, and $\adj(Q)=e_1e_1^{\mathsf t}$, so
+$c_{a_0}^{\mathsf t}\adj(Q)c_{a_1}=1$. \emph{In words:} at $x=1$ the network
+acts on the terminal polynomial exactly by $\Delta_z$; at $x=0$ it is absent
+and acts by the identity. If the symbol's polynomial is $z$ (a bit that must
+be flipped), the network flips it at $x=1$ only.
+
+%======================================================================
+\section{Audit status}
+\label{sec:audit}
+
+\paragraph{What was checked.} Four independent reviews: cyclotomic;
+ring class; nonvanishing, coefficients and graphs; assembly and sanity.
+Numerical checks used cypari2 and numpy:
+\begin{itemize}
+\item root numbers and rank bounds on $446$ curves $y^2=x^3+ax^2+bx$;
+\item $138$ twists of 14a1, with $v_2(L_*)-2w\in\{-1,1,3\}$;
+\item Tamagawa factors in $302$ cases;
+\item the graph combinatorics ($400$ random graphs, about $200$ full runs of
+ \lbl{gr:address}, $0$ failures).
+\end{itemize}
+Each cited result was checked against its $p=2$ hypotheses: Kato 12.5(3)
+and the integral classes 8.1.3, 8.9--8.12 and 9.7 hold at $p=2$, while
+12.5(4) and 13.4(3) are avoided. Ferrero--Washington holds at $2$, and
+Nekov\'a\v{r}'s (P) holds over imaginary $K$. Howard is used only as a
+pattern. \textbf{Verdict: no error found.}
+
+\paragraph{Gaps (sketched or unverified, not shown false).}
+\begin{enumerate}
+\item \emph{Simultaneous-diagram infrastructure:}
+ \src{ring-determinants}{1542--1604}, \src{ring-limits}{219--281,
+ 941--981}. Ultrafilter limits of finite-level Selmer complexes with moving
+ auxiliary and derivative primes are written as checklists pointing to
+ sketched constructions. This is the place most in need of expert scrutiny.
+\item \emph{Smaller sketches:} the rational comparison
+ \src{cyclotomic}{523--537}; the Kummer orthogonality nullhomotopy
+ \src{ring-limits}{320--341}; lattice preservation by $t(u),d(u)$ and the
+ derivation of $H_U[q^2]$ (\texttt{coefficients}); the compressed Poisson
+ and omitted-factor steps (\texttt{nonvanishing}).
+\item \emph{Not independently verified:} Kato's 13.4 rests on other works
+ at $p=2$, and these were not rechecked.
+\end{enumerate}
+
+\paragraph{Minor fixes.} The key \texttt{Howard2012} is Howard's 2004
+Compositio paper. \src{ring-limits}{33} should cite Cai--Shu--Tian with
+$c=|h|$. Kato 8.1.2 needs $\mathrm{prime}(cd)\cap S=\emptyset$ (take $c,d$
+prime). The real-component cokernel (Kato 12.1.2) is unmentioned but
+harmless. \lbl{pw:split-witness} should state that $k$ is a square at $2N$.
+$P_h$ denotes two different sums.
+
+%======================================================================
+\begin{thebibliography}{99}\small
+\bibitem{P2C} OpenAI, \emph{A pointwise $2$-converse for elliptic curves with
+rational two-torsion}, OpenAI Math Release preprint, October 7, 2026.
+\bibitem{OAIGoldfeld} OpenAI, \emph{Goldfeld's analytic density conjecture and
+the $2$-converse for elliptic curves}, OpenAI Math Release preprint, 2026.
+\bibitem{H10} OpenAI, \emph{Hilbert's tenth problem over the rational numbers},
+OpenAI Math Release preprint, October 6, 2026. (Not cited in \cite{P2C}.)
+\bibitem{Bogomolov1981Points} F.~A.~Bogomolov, Points of finite order on an
+Abelian variety, \emph{Math.\ USSR-Izv.} 17 (1981), 55--72.
+\bibitem{BurungaleCastellaSkinnerTian2022} A.~Burungale, F.~Castella,
+C.~Skinner, Y.~Tian, $p^\infty$-Selmer groups and rational points on CM
+elliptic curves, \emph{Ann.\ Math.\ Qu\'ebec} 46 (2022), 325--346.
+\bibitem{BurungaleSkinner2024Appendix} A.~Burungale, C.~Skinner, A
+$p$-converse theorem for CM elliptic curves, Appendix A to L.~Alp\"oge,
+M.~Bhargava, A.~Shnidman, \emph{Integers expressible as the sum of two
+rational cubes}, arXiv:2210.10730v3 (2024).
+\bibitem{BurungaleTian2026} A.~A.~Burungale, Y.~Tian, A rank zero $p$-converse
+to a theorem of Gross--Zagier, Kolyvagin and Rubin, \emph{Ann.\ of Math.} 203
+(2026), 1--13.
+\bibitem{CaiShuTian2014} L.~Cai, J.~Shu, Y.~Tian, Explicit Gross--Zagier and
+Waldspurger formulae, \emph{Algebra \& Number Theory} 8 (2014), 2523--2572.
+\bibitem{Cassels1965} J.~W.~S.~Cassels, Arithmetic on curves of genus 1. VIII,
+\emph{J.\ reine angew.\ Math.} 217 (1965), 180--199.
+\bibitem{CGLS2022} F.~Castella, G.~Grossi, J.~Lee, C.~Skinner, On the
+anticyclotomic Iwasawa theory of rational elliptic curves at Eisenstein
+primes, \emph{Invent.\ Math.} 227 (2022), 517--580.
+\bibitem{Chaiken1982} S.~Chaiken, A combinatorial proof of the all minors
+matrix tree theorem, \emph{SIAM J.\ Algebraic Discrete Methods} 3 (1982),
+319--329.
+\bibitem{Chevalley1935} C.~Chevalley, D\'emonstration d'une hypoth\`ese de
+M.~Artin, \emph{Abh.\ Math.\ Sem.\ Univ.\ Hamburg} 11 (1935), 73--75.
+\bibitem{DokchitserDokchitser2010} T.~Dokchitser, V.~Dokchitser, On the
+Birch--Swinnerton-Dyer quotients modulo squares, \emph{Ann.\ of Math.} 172
+(2010), 567--596.
+\bibitem{FerreroWashington1979} B.~Ferrero, L.~C.~Washington, The Iwasawa
+invariant $\mu_p$ vanishes for abelian number fields, \emph{Ann.\ of Math.}
+109 (1979), 377--395.
+\bibitem{FriedlanderIwaniec2010} J.~Friedlander, H.~Iwaniec, \emph{Opera de
+cribro}, AMS Colloquium Publications 57, 2010.
+\bibitem{GrossZagier1986} B.~H.~Gross, D.~B.~Zagier, Heegner points and
+derivatives of $L$-series, \emph{Invent.\ Math.} 84 (1986), 225--320.
+\bibitem{HeathBrownChevalleyWarning} D.~R.~Heath-Brown, A note on the
+Chevalley--Warning theorems, \emph{Russian Math.\ Surveys} 66 (2011), 427--436.
+\bibitem{HoffsteinLuo1997} J.~Hoffstein, W.~Luo, Nonvanishing of $L$-series and
+the combinatorial sieve, \emph{Math.\ Res.\ Lett.} 4 (1997), 435--444.
+\bibitem{Howard2012} B.~Howard, The Heegner point Kolyvagin system,
+\emph{Compositio Math.} 140 (2004), 1439--1472. (Bib key \texttt{Howard2012}
+in \cite{P2C}.)
+\bibitem{JetchevKane2010} D.~Jetchev, B.~Kane, Equidistribution of Heegner
+points and ternary quadratic forms, \emph{Math.\ Ann.} 350 (2011), 501--532.
+\bibitem{Kato2004} K.~Kato, $p$-adic Hodge theory and values of zeta functions
+of modular forms, \emph{Ast\'erisque} 295 (2004), 117--290.
+\bibitem{KellerYin2024} T.~Keller, M.~Yin, $p$-converse theorems for elliptic
+curves of potentially good ordinary reduction at Eisenstein primes,
+arXiv:2410.23241v1 (2024).
+\bibitem{Kim2023SoftConverse} C.-H.~Kim, On the soft $p$-converse to a theorem
+of Gross--Zagier and Kolyvagin, \emph{Math.\ Ann.} 387 (2023), 1961--1968.
+\bibitem{Kolyvagin1990} V.~A.~Kolyvagin, Euler systems, in \emph{The
+Grothendieck Festschrift, Vol.\ II}, Progr.\ Math.\ 87, Birkh\"auser, 1990,
+435--483.
+\bibitem{Kriz2022CM} D.~Kriz, Supersingular main conjectures, Sylvester's
+conjecture and Goldfeld's conjecture, arXiv:2002.04767v5 (2022).
+\bibitem{Monsky1996} P.~Monsky, Generalizing the Birch--Stephens theorem.\ I.
+Modular curves, \emph{Math.\ Z.} 221 (1996), 415--420.
+\bibitem{Nekovar2006} J.~Nekov\'a\v{r}, \emph{Selmer complexes},
+Ast\'erisque 310, Soc.\ Math.\ France, 2006.
+\bibitem{Serre1972} J.-P.~Serre, Propri\'et\'es galoisiennes des points d'ordre
+fini des courbes elliptiques, \emph{Invent.\ Math.} 15 (1972), 259--331.
+\bibitem{Shimura1973HalfIntegral} G.~Shimura, On modular forms of half integral
+weight, \emph{Ann.\ of Math.\ (2)} 97 (1973), 440--481.
+\bibitem{Skinner2020} C.~Skinner, A converse to a theorem of Gross, Zagier, and
+Kolyvagin, \emph{Ann.\ of Math.} 191 (2020), 329--354.
+\bibitem{Smith2025} A.~Smith, The Birch and Swinnerton-Dyer conjecture implies
+Goldfeld's conjecture, arXiv:2503.17619v1 (2025).
+\bibitem{Waldspurger1981} J.-L.~Waldspurger, Sur les coefficients de Fourier des
+formes modulaires de poids demi-entier, \emph{J.\ Math.\ Pures Appl.} 60
+(1981), 375--484.
+\bibitem{Warning1935} E.~Warning, Bemerkung zur vorstehenden Arbeit von Herrn
+Chevalley, \emph{Abh.\ Math.\ Sem.\ Univ.\ Hamburg} 11 (1935), 76--83.
+\bibitem{Weil1964} A.~Weil, Sur certains groupes d'op\'erateurs unitaires,
+\emph{Acta Math.} 111 (1964), 143--211.
+\bibitem{Zhang2014Heegner} W.~Zhang, Selmer groups and the indivisibility of
+Heegner points, \emph{Camb.\ J.\ Math.} 2 (2014), 191--253.
+\end{thebibliography}
+
+\end{document}

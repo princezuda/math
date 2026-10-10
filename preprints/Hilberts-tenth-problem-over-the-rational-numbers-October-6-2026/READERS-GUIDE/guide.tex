@@ -1,0 +1,1281 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,longtable,array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black,
+  pdftitle={Hilbert's tenth problem over Q: a reader's guide}}
+
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{3em}
+\setlist{itemsep=0.15em,topsep=0.25em}
+
+\newtheorem*{statement}{Statement}
+\theoremstyle{definition}
+\newtheorem*{gloss}{In words}
+
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\R}{\mathbb R}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\sZ}{{}^*\Z}
+\newcommand{\sQ}{{}^*\Q}
+\newcommand{\sF}{{}^*F}
+\newcommand{\Kmult}{\mathcal K}
+\newcommand{\Cpts}{\mathcal C}
+\newcommand{\lbl}[1]{\texttt{#1}}
+\newcommand{\src}[1]{\textsf{#1}}
+\newcommand{\inwords}[1]{\par\smallskip\noindent\emph{In words:} #1\par}
+\DeclareMathOperator{\Sel}{Sel}
+\DeclareMathOperator{\Sha}{Sha}
+\DeclareMathOperator{\Supp}{Supp}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\corank}{corank}
+
+\newcommand{\checkhead}{\par\smallskip\noindent\textbf{(d) What to check.}\ }
+
+\title{Hilbert's tenth problem over $\mathbb Q$: a reader's guide}
+\author{Companion to OpenAI preprint\\
+\texttt{OAI:Hilberts-tenth-problem-over-the-rational-numbers-October-6-2026}.\\
+Independent exposition; all mathematics is the preprint's.}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fbox{\parbox{0.92\textwidth}{\small
+\textbf{Status note.}
+The preprint \cite{H10Q} is unrefereed, and no Lean formalization exists.
+Its main theorem is \emph{conditional} on another unrefereed OpenAI
+preprint, the pointwise $2$-converse \cite[Thm.~1.1]{PointwiseTwoConverse},
+which is used in \S3 of the preprint; nothing in the established literature is
+known to replace it.
+Our independent audit (five reviews, one per part, plus numerical checks)
+found no error in the preprint itself.  This guide is an exposition, not a
+referee report: none of the audit's reviewers is a referee in the field, and
+the audit is evidence, not proof.}}
+\end{center}
+
+\paragraph{How to use this guide.}
+Read \S\S1--4 (about 25 minutes), then the part of \S5 relevant to your
+expertise, keeping the preprint open.  Source pointers have the form
+\src{02:143}, meaning file \src{sections/02-reduction.tex}, line~143,
+in the build directory of the October~6, 2026 version.  Labels such as
+\lbl{red:local-comparison} are the preprint's \verb|\label| names.
+We sometimes simplify notation; when we do, we say so.
+Remarks marked \emph{(ours)} are the guide's own and are not in the preprint.
+
+\tableofcontents
+
+%======================================================================
+\section{The theorem and why it is hard}
+
+\begin{statement}[\lbl{thm:main}, \src{01:7}]
+There is no algorithm which, given $f\in\Z[X_1,\dots,X_n]$, with $n$ part
+of the input, decides whether $f$ has a zero in $\Q^n$.
+\end{statement}
+
+\paragraph{The classical route and its barrier.}
+Over $\Z$ the problem is undecidable by Davis--Putnam--Robinson--Matiyasevich
+\cite{DavisPutnamRobinson1961,Matiyasevich1970}.  The obvious transfer to
+$\Q$ would be an \emph{existential} (Diophantine) definition of $\Z$ in $\Q$,
+or more generally a Diophantine model of $(\Z,+,\cdot)$ in some $\Q^k$.
+The known definitions have extra quantifiers.  Robinson defined $\Z$ in
+$\Q$ by a first-order formula \cite{Robinson1949}.  Poonen used a formula of
+shape $\forall^2\exists^7$ \cite{Poonen2009}.  Koenigsmann gave a universal
+definition \cite{Koenigsmann2016}.  None of these is existential.
+
+Mazur's conjecture on the topology of rational points \cite{Mazur1995}
+would rule out a Diophantine definition of $\Z$ in $\Q$.  By
+Cornelissen--Zahidi \cite[Thm.~3.6]{CornelissenZahidi2000}, it would also
+rule out any Diophantine model of $\Z$ in a power $\Q^k$.  So the direct
+route is widely expected to be impossible.
+
+\paragraph{How the preprint evades it.}
+The preprint proves a \emph{Turing} reduction
+$\mathrm{H10}(\Z)\le_T\mathrm{H10}(\Q)$.  For each nonconstant $f$ it
+effectively lists finite ``tests''.  Each test is a finite system of
+rational-solvability questions, and
+\[
+ f\ \text{has a zero in }\Z^n
+ \iff \text{every test succeeds}
+ \qquad(\lbl{intro:finite-test-interface},\ \src{01:176}).
+\]
+The right side is an infinite conjunction of existential statements over
+$\Q$.  No single Diophantine set is shown to equal $\Z$, and no model of
+arithmetic is built.  The preprint says so explicitly: the construction
+``gives no single existential definition of $\Z$ in $\Q$''
+(\src{07:295}).  Our audit agrees that the result does not conflict with
+Mazur's conjecture or with Cornelissen--Zahidi.
+
+\paragraph{Lineage.}
+Rank-one elliptic curves as carriers of integer indices go back to Poonen
+\cite{PoonenRankOne2002,PoonenSubrings}.  The number-field analogue, for
+rings of integers, was recently settled unconditionally by Koymans--Pagano
+\cite{KoymansPagano2026} and by Alp\"oge--Bhargava--Ho--Shnidman
+\cite{AlpogeBhargavaHoShnidman2026}.  Those results concern finitely
+generated $\Z$-algebras, a class that does not contain $\Q$.  The new
+ingredient here is a \emph{height bound}, which is used to show that a
+nonstandard ``solution'' passing every test must in fact be standard.
+
+%======================================================================
+\section{The proof in one page}\label{sec:onepage}
+
+Fix a nonconstant $f$.  Assume every test succeeds, and suppose for
+contradiction that $f$ has no integer zero.
+
+\paragraph{Step 0: the decision procedure.}
+Integer zeros are recursively enumerable.  Given an oracle for
+$\mathrm{H10}(\Q)$, failed tests are recursively enumerable too.  Run both
+searches in parallel.  The arithmetic content is that \emph{some test fails
+whenever $f$ has no integer zero} (\src{01:181}, \src{02:876--887}).
+
+\paragraph{Step 1: compactness.}
+If all tests succeed, the following exist (Lemma \lbl{red:compactness}):
+an elementary extension of the many-sorted structure
+$(\Q,\Z,\R,F,\text{valuations},\text{heights},\dots)$; a ring $R$ embedded
+in its rational sort $\sQ$; and a root $\mathbf a\in R^n$ with
+$f(\mathbf a)=0$.  The ring $R$ satisfies a recursive theory $\mathcal T$,
+and every element of $R$ satisfies the pole-parity formula $\Phi$.
+
+\paragraph{Step 2: the index map.}
+$\mathcal T$ attaches to each $a\in R$ a point $T_a$ on
+$E:y^2=x^3-d^2x$ over $F=\Q(\sqrt2)$, compatibly with addition, with
+$T_1=P$.  Here $E(F)$ has rank one and $mE(F)=\Z P$.  Transfer then gives
+\[
+ \widetilde T_a=\eta(a)P,\qquad \eta:R\to\sZ\ \text{additive, injective},\
+ \eta(1)=1.
+\]
+The map $\eta$ need not be multiplicative, so $f(\eta(\mathbf a))$ need not
+vanish.  Put
+\[
+ \delta=f(\eta(a_1),\dots,\eta(a_n))\in\sZ,\qquad
+ B=\max(1,|\eta(a_j)|),\qquad D=\max(1,\deg f).
+\]
+If $\delta=0$, elementarity gives an ordinary integer zero.  So assume
+$\delta\neq0$.
+
+\paragraph{Step 3: slopes and contact primes.}
+At each ordinary precision $K$, $\mathcal T$ writes every $A\in R$ as
+\[
+ A=\frac{u_1+u_2+u_3}{v},\qquad \text{slopes } s_i=(u_i:v)\in\PP^1.
+\]
+Each of the thirteen \emph{contact values} $v$ and $L_b(u_i,v)$ is required
+to be $\pm k\,r$, with $k$ in a fixed finite set and $r$ a ``tested prime''
+of $R$.  A prime $q$ of $\sZ$ outside the exceptional set is a
+\emph{contact prime} of $s$ if some $L_b(u,v)$ has odd normalized
+valuation at $q$.
+
+\paragraph{Step 4: local comparison at every contact prime.}
+At such a $q$, some tested $r$ has odd $q$-valuation.  Pole parity and a
+coarsening of $v_q$ select one of the two tested branches above $r$.  The
+paired elliptic tests there give
+\[
+ v_q\bigl(\widetilde a-\eta(a)\bigr)\ge K\quad\text{for all }a\in R
+ \qquad(\lbl{red:index-congruence}).
+\]
+
+\paragraph{Step 5: one error term for all $A$.}
+Apply Step~4 to the root $\mathbf a$.  Since $f(\widetilde{\mathbf a})=0$,
+we get $v_q(\delta)\ge K$ at every contact prime of every slope.  Then fix
+$K\ge cD$, where $c$ is the exponent of the height estimate.  Chain:
+\begin{gather*}
+ M_K(\widetilde s_i)^K\mid\delta,\qquad
+ 0<|\delta|\le C_fB^D
+ \qquad(\text{\src{02:781}, \src{02:809}})\\
+ \Longrightarrow\quad
+ h(\widetilde s_i)\le H_KM_K(\widetilde s_i)^c
+ \le H_K|\delta|^{c/K}
+ \le H_KC_f^{c/K}B^{cD/K}\ll_f B
+ \qquad(\text{\src{02:816--826}})\\
+ \Longrightarrow\quad
+ h(\widetilde A)\le\textstyle\sum_{i=1}^3h(\widetilde s_i)+\log3\ll_f B
+ \quad\text{for every }A\in R
+ \qquad(\lbl{red:all-ring-height}).
+\end{gather*}
+The implied constant is ordinary and independent of $A$.
+
+\paragraph{Step 6: canonical height.}
+Each $x(T_{a_j})$ equals $(x_0(a_j)+x_1(a_j)\sqrt2)/x_2(a_j)$, built from
+three ring elements.  So
+$h(x(\eta(a_j)P))\ll_f B$.  Transfer of
+$h(x(nP))=2\widehat h(P)n^2+O(1)$, with $\widehat h(P)>0$ \cite{Silverman2009}, then gives
+\[
+ 2\widehat h(P)\,B^2\le CB+C'
+ \quad\Longrightarrow\quad B\ll_f 1.
+\]
+Hence every $\eta(a_j)$ is an ordinary integer $n_j$.  Additivity and
+injectivity give $a_j=n_j$.  So $f$ has an ordinary integer zero,
+contradicting $\delta\ne0$.
+
+\inwords{The tests cannot force $R=\Z$.  They can force every element of
+$R$ to agree $q$-adically with its elliptic index, at every prime that the
+height estimate needs.  That one fact turns a single nonzero integer
+$\delta$ into a uniform height bound on $R$.  Quadratic growth of
+canonical height then leaves no room for nonstandard indices.}
+
+The preprint's own one-figure summary of Steps~3--5 is in
+\src{figures/reduction-overview.tex} (input at \src{02:790}).
+
+%======================================================================
+\section{Dependency diagram}\label{sec:diagram}
+
+The reduction draws on five inputs.  Four are arithmetic: \S3, \S4, \S5
+and \S6 of the preprint.  The fifth is logical: compactness and
+Skolemization, applied in \S2.4.
+
+\begin{figure}[ht]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  every node/.style={font=\footnotesize,align=center},
+  base/.style={rounded corners=2pt,inner sep=4pt,text width=3.3cm,minimum height=1.3cm},
+  classical/.style={base,draw=black!70,fill=black!4},
+  paper/.style={base,draw=blue!55!black,very thick,fill=blue!6},
+  oaiess/.style={base,draw=red!70!black,very thick,dashed,fill=red!7},
+  oaiin/.style={base,draw=orange!80!black,thick,dashed,fill=orange!8},
+  alt/.style={base,draw=black!50,dotted,thick,fill=white},
+  arr/.style={-{Stealth[length=2mm]},semithick,draw=black!75},
+  essarr/.style={-{Stealth[length=2.4mm]},very thick,draw=red!70!black},
+  inarr/.style={-{Stealth[length=2mm]},thick,dashed,draw=orange!80!black}]
+% top row
+\node[alt,text width=3.0cm]   (alt) at (-0.2,5.2) {Ribet--Pyle building blocks; Khare--Wintenberger, Kisin\\(classical route, per audit)};
+\node[oaiin,text width=2.9cm] (fm)  at (4.1,5.2) {\textbf{Fontaine--Mazur at 2}\\OpenAI preprint\\\emph{inessential}};
+\node[classical,text width=2.5cm] (ct) at (8.45,5.2) {Cassels--Tate pairing; Monsky matrices};
+% second row: classical and OpenAI inputs
+\node[classical] (e1)  at (0,2.6) {2-isogeny descent over $\Q(\sqrt2)$; formal groups};
+\node[classical,text width=2.5cm] (e2) at (3.2,2.6) {Shimura curves; Faltings; Pazuki; Javanpeykar; Gaudron--R\'emond; Carayol};
+\node[oaiess,text width=2.5cm] (ptc) at (6.85,2.6) {\textbf{Pointwise 2-converse}\\OpenAI preprint\\\emph{essential}};
+\node[classical] (gtz) at (11.1,2.6) {Green--Tao--Ziegler; Selberg upper sieve};
+\node[classical] (log) at (14.8,2.6) {Compactness; Skolemization; elementary diagram};
+% third row: inputs proved in the preprint
+\node[paper] (i1) at (0,0) {\textbf{I1}\ \S5\\ rank-one $E/\Q(\sqrt2)$; formal log\\ \lbl{ell:rank}\\\lbl{ell:formal}};
+\node[paper] (i2) at (3.7,0) {\textbf{I2}\ \S4\\ five-point height\\ \lbl{hei:height}};
+\node[paper] (i3) at (7.4,0) {\textbf{I3}\ \S3\\ pole parity $\Phi$\\ \lbl{par:pole-parity}};
+\node[paper] (i4) at (11.1,0) {\textbf{I4}\ \S6\\ contact representations\\ {\scriptsize\lbl{pri:integer-coverage}}};
+\node[paper] (i5) at (14.8,0) {\textbf{I5}\ \S2.4\\ finite tests, compactness\\ \lbl{red:compactness}};
+% core
+\node[paper,text width=17.6cm,minimum height=1.1cm] (core) at (7.4,-2.6)
+ {\textbf{\S2 Reduction.}\ \lbl{red:standard-model} (I1, I4)\quad
+  failed-test soundness (I3(1))\quad
+  \lbl{red:local-comparison} (I1)\quad \lbl{red:coarsening} (I3(2))\\
+  \lbl{red:index-congruence}\quad \lbl{red:finite-test-success} (I2, canonical height)};
+\node[paper,text width=4.2cm] (main) at (7.4,-4.6) {\textbf{Theorem} \lbl{thm:main}\\ $\mathrm{H10}(\Z)\le_T\mathrm{H10}(\Q)$};
+\node[classical] (dprm) at (14.8,-4.6) {DPRM theorem};
+\node[paper,text width=4.2cm] (s7) at (7.4,-6.5) {\textbf{\S7}\ degree $0'$; quartic and sum-of-squares forms};
+% arrows
+\draw[arr] (e1)--(i1);
+\draw[arr] (e2.south)--(e2.south |- i2.north);
+\draw[inarr] (fm.south -| 5.15,0) -- (5.15,0 |- i2.north);
+\draw[arr,dotted,thick] (alt)--node[above=3pt,font=\scriptsize]{can replace}(fm);
+\draw[essarr] (ptc.south)--(ptc.south |- i3.north);
+\draw[arr] (ct.south -| 8.45,0)--(8.45,0 |- i3.north);
+\draw[arr] (gtz)--(i4);
+\draw[arr] (log)--(i5);
+\foreach \n in {i1,i2,i3,i4,i5}{\draw[arr] (\n)--(\n |- core.north);}
+\draw[arr] (core)--(main);
+\draw[arr] (dprm)--(main);
+\draw[arr] (main)--(s7);
+% legend
+\node[classical,text width=2.4cm,minimum height=0.55cm] at (-0.3,-8.2) {classical};
+\node[paper,text width=2.4cm,minimum height=0.55cm] at (3.2,-8.2) {proved in preprint};
+\node[oaiess,text width=2.4cm,minimum height=0.55cm] at (6.7,-8.2) {OpenAI, essential};
+\node[oaiin,text width=2.4cm,minimum height=0.55cm] at (10.2,-8.2) {OpenAI, inessential};
+\node[alt,text width=2.4cm,minimum height=0.55cm] at (13.7,-8.2) {alternative route};
+\end{tikzpicture}}
+\caption{Inputs to the reduction.  I3 has two halves.  Its completeness
+half, (1): $\Phi(b)$ holds for every $b\in\Z$; this half needs the
+pointwise $2$-converse.  Its soundness half, (2): no odd poles outside
+$S_1$; this half is elementary (\lbl{par:soundness}).  Half (1) is used
+only for the \emph{easy} direction: an integer zero passes every test.
+Half (2) is used in the hard direction.  Not drawn: \S6 also uses
+\lbl{ell:formal} from I1, in \lbl{pri:integer-tests}.}
+\label{fig:deps}
+\end{figure}
+
+\paragraph{Reading the diagram.}
+\begin{itemize}
+\item \textbf{Essential external dependency:} \cite[Thm.~1.1]{PointwiseTwoConverse}
+(\src{03:457--462}, \src{03:493}).  Note where it enters.  It proves
+\emph{completeness} of $\Phi$ on $\Z$.  Without it, nothing guarantees
+that an $f$ with an integer zero passes every test, so a failed test would
+no longer certify ``no integer zero'' (\src{02:540--543}).  The preprint's Remark (\src{03:528}) offers
+\cite{UnrestrictedTwoConverse} as an alternative.  That is also an OpenAI
+preprint.
+\item \textbf{Inessential external dependency:}
+\cite[Thm.~1.1]{OddRegularFontaineMazurAtTwo}, used for modularity of
+$r_2$ (\src{04:902--954}).  The audit records a classical replacement:
+$A$ is a Ribet--Pyle building block, hence a factor of a $\mathrm{GL}_2$-type
+abelian variety over $\Q$, hence modular by Khare--Wintenberger and Kisin.
+Alternatively one can apply Pan's theorem at some $\ell\ge5$ and transfer
+the result via \lbl{hei:compatibility}.  (These three works are not in the
+preprint's bibliography.)
+\item Everything else is either proved in the preprint or is a published
+theorem.
+\end{itemize}
+
+%======================================================================
+\section{Notation}\label{sec:notation}
+
+Line numbers are approximate pointers to the first definition.
+
+{\small
+\begin{longtable}{>{$}p{3.05cm}<{$}>{\raggedright\arraybackslash}p{7.55cm}>{\raggedright\arraybackslash}p{4.1cm}}
+\toprule
+\text{Symbol} & Meaning & Where\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+F=\Q(\sqrt2),\ \sigma & base field; its nontrivial automorphism & \lbl{ell:data}, \src{02:19}\\
+d=75-53\sqrt2 & totally positive, norm $7$; $(d)$ is prime with residue field $\F_7$ & \src{02:20}, \src{05:11}\\
+E,\ E^\sigma & $E:y^2=x^3-d^2x$ and its conjugate & \lbl{ell:data}\\
+m,\ P & $mE(F)=\Z P$, with $P$ nontorsion & \lbl{ell:rank}, \src{02:27}\\
+z=-x/y,\ \ell,\ \ell_K & formal parameter ($z(O)=0$); formal logarithm; its truncation in degree $\le K$ & \src{02:96--102}\\
+S_E & primes excluded in the formal estimates & \lbl{ell:formal}, \src{02:109}\\
+R & integral domain of characteristic $0$ with $\sqrt2\notin\operatorname{Frac}R$; in the proof, the compactness model & \src{02:37}, \lbl{red:compactness}\\
+R_F,\ F_R & $R[\sqrt2]$ and $\operatorname{Frac}(R)(\sqrt2)$ & \src{02:40}\\
+T_a & point of $E(F_R)$ attached to $a\in R$ (the point axioms) & \lbl{red:elliptic-axioms}, \src{02:43}\\
+x_0,\dots,y_2 & six ring-valued functions giving the coordinates of $T_a$ & {\scriptsize\lbl{red:coordinate-functions}}, \src{02:54}\\
+\text{ordinary},{}^*,\widetilde{\ } & element of the original structure; sort of the elementary extension; image of an element of $R$ & \src{02:63--73}\\
+\sZ,\ \sQ,\ \sF & ambient integer, rational and $F$ sorts & \src{02:63}\\
+\eta & $R\to\sZ$ with $\widetilde T_a=\eta(a)P$; additive and injective & \lbl{red:eta}, \src{02:78}\\
+\Cpts & five points of $\PP^1(\Q)$, including $\infty$: the branch values of $X\to X^*$ & \lbl{hei:height}; \src{04:165--172}\\
+L_b(U,V) & primitive integral linear form vanishing at $b\in\Cpts$, with $L_\infty=V$ (the ``contact forms'') & \src{02:236}\\
+\text{contact order} & $v_q(L_b(u,v))-\min\{v_q(u),v_q(v)\}$ & \lbl{hei:radical}\\
+M_S(s) & product, without repetition, of $q\notin S$ at which some contact order of $s$ is odd (the \emph{contact primes}) & \src{02:238--243}\\
+S,\ H,\ c & exceptional set and constants in $h(s)\le HM_S(s)^c$ & \lbl{hei:height}\\
+K & ordinary precision; the final proof uses $K\ge cD$ & \src{02:349}, \src{02:783}\\
+S_K,\ M_K,\ H_K & exceptional set enlarged at precision $K$; the corresponding radical and constant & \src{02:597--614}\\
+\Kmult & finite multiplier set, fixed before everything else & \lbl{pri:pattern}, \src{06:21}\\
+u_i,\ v,\ s_i & $u_3=Av-u_1-u_2$; slopes $s_i=(u_i:v)$ & \src{02:349--362}\\
+r,\ B_r,\ \mathfrak p_\pm & tested element; $B_r^2\equiv2\bmod r$; the two branch ideals of $R_F$ above $r$ & \lbl{red:branch-ideals}, \src{02:365--379}\\
+h,\ j_0 & auxiliary nonzero ring elements at a branch, \emph{independent of $a$} & \src{02:381--399}\\
+D'\in r^i(R_F)_{\mathfrak p} & ring-language localization membership & {\scriptsize\lbl{red:localization-definition}},\newline \src{02:425}\\
+\mathcal T & the recursive theory & \src{02:335--433}\\
+\Phi,\ S_1 & pole-parity formula and its exceptional set & \lbl{par:pole-parity}, \src{02:477}; \src{03:50--61}\\
+E_l & $y^2=x(x-l)(x+3l)$ & \lbl{par:curve}, \src{03:47}\\
+\mathcal M,\mathcal D_m,\newline b',U,H',t,e & multiplier lists and auxiliary quantities in $\Phi$ & {\small\lbl{par:auxiliary-functions}}\\
+\beta,\theta,B,J\,(\S3) & squarefree representatives of the classes of $b',H'$; their supports & \src{03:163--168}\\
+K,N,s,\lambda,D_w\ (\S3) & Monsky-type matrices over $\F_2$ & \lbl{par:matrices}, \src{03:274}\\
+\delta,\ B,\ D,\ C_f & $f(\eta(\mathbf a))$; $\max(1,|\eta(a_j)|)$; $\max(1,\deg f)$; the constant in $|\delta|\le C_fB^D$ & \src{02:766--781}\\
+J\ (\S2.5),\ v_*,\ w_* & convex subgroup generated by negative ring valuations; place above $q$; its coarsening & \src{02:657--680}\\
+X,\mathcal W,X^* & Shimura curve of discriminant $210$ (genus $5$); Atkin--Lehner group $(\Z/2)^4$; the quotient $X^*\simeq\PP^1$ & \src{04:65--111}\\
+Y,\pi,\mathcal A & fine-level cover, $\pi:Y\to\PP^1$, principally polarized QM abelian surface family & \src{04:175--247}\\
+B,\mathcal O\ (\S4) & quaternion algebra of discriminant $210$; a maximal order & \src{04:44--47}\\
+K_0,L,L',T\ (\S4) & fiber field; field of homomorphisms; kernel field of $\beta|_{G_L}$; $T=S\cup\{q\mid M\}$ & \lbl{hei:fiber-field}, \lbl{hei:hom-field}, \src{04:888}\\
+\mu_g,\epsilon,\chi,\beta\ (\S4) & conjugation isogenies; sign cocycle; Dirichlet character; splitting cochain & \src{04:710--779}\\
+R_\ell,\ r_\ell,\ f,\ N & 4- and 2-dimensional Galois representations; newform; level & \src{04:865--979}\\
+J=J_1(N),\ D_0,\ D_Z & modular Jacobian; complement; Zarhin's principally polarized complement & \src{04:1162--1246}\\
+h,\ \widehat h,\ h_{\mathrm F} & absolute log Weil height; canonical height; stable Faltings height & \src{02:228}, \src{02:854}, \src{04:13}\\
+\Psi_\nu,W_0,W,L,X & divided forms, moduli, cutoff and scale in the prime-pattern count & \src{06:289--353}\\
+\end{longtable}}
+
+\paragraph{Overloaded symbols (a refereeing hazard).}
+\begin{itemize}
+\item $B$: the index bound (\S2); the quaternion algebra (\S4); $\Supp\beta$
+(\S3); the size threshold in \lbl{pri:pattern}.
+\item $\beta$: a square class (\S3); a cochain (\S4).
+\item $K$: the precision; a matrix (\S3); a compact open subgroup (\S4.1).
+Also $K_0$ (a field) and $\Kmult$ (the multiplier set).
+\item $L$: a field (\S4); the sieve cutoff (\S6); the unit parameter in
+\lbl{par:soundness}.
+\item $J$: a convex subgroup (\S2.5); $\Supp\theta$ (\S3); $J_1(N)$ (\S4).
+\item $m$: the index in $mE(F)$; a multiplier in $\Phi$; the order of $\chi$.
+\item $d$: the curve parameter; $d=m_db$ in $\Phi$; $d_1,d_2$ group orders (\S6).
+\item $h$: a height; an auxiliary ring element.
+\item $c$: the height exponent; the scalars $c(g,h)$; $c$ in $H'=\theta c^2$.
+\item $T$: the theory $\mathcal T$; a prime set (\S4); a vector (\S6).
+\item $r$: the tested prime; a rank; the number of branch values; the representation $r_\ell$.
+\end{itemize}
+
+%======================================================================
+\section{Section-by-section guide}\label{sec:guide}
+
+Each subsection gives (a) the main statements, (b) the idea, (c) the key
+computation or trick, and (d) what a referee should check.
+
+%----------------------------------------------------------------------
+\subsection{Preprint \S2: finite rational tests (\src{02-reduction.tex}, 888 lines)}
+
+This is the logical core of the preprint.  Read it in full.
+
+\paragraph{(a) Main statements.}
+
+\emph{Inputs stated here and proved later.}
+\begin{itemize}
+\item \lbl{ell:rank} (\src{02:27}): $\rank E(F)=1$ (proved in \S5).
+\item \lbl{ell:formal} (\src{02:109}): the formal estimates (\S5).
+\item \lbl{hei:height} (\src{02:232}): the five-point height estimate (\S4).
+\item \lbl{pri:integer-coverage} (\src{02:294}): ordinary contact representations (\S6).
+\item \lbl{par:pole-parity} (\src{02:477}): pole parity (\S3).
+\end{itemize}
+
+\emph{Lemma \lbl{red:local-comparison}} (\src{02:143}).
+Fix ordinary $K\ge1$, a prime $q$ of $\sZ$ with $q\notin S_E$ and $q>K+1$,
+and a place $v_*$ of $\sF$ above $q$.  Suppose there are nonzero
+$h,j_0\in R$, \emph{independent of $a$}, such that for all $a\in R$ the
+following hold.
+\begin{enumerate}[label=(\roman*)]
+\item $\widetilde T_h,\widetilde T_{ha}$ reduce to $O$ at $v_*$,
+$\ell_K(z(\widetilde T_h))\neq0$, and
+\[
+ v_*\Bigl(\frac{\ell_K(z(\widetilde T_{ha}))}{\ell_K(z(\widetilde T_h))}-\widetilde a\Bigr)\ge K.
+\]
+\item $\widetilde T^\sigma_{j_0}$ and $\widetilde T^\sigma_{(h-4)a}$ reduce
+to $O$ on $E^\sigma$ at the same $v_*$, and
+\[
+ v_*\bigl(z(\widetilde T^\sigma_{(h-4)a})/z(\widetilde T^\sigma_{j_0})\bigr)\ge K.
+\]
+\end{enumerate}
+Then every $\widetilde a$ is $q$-integral and
+$v_q(\widetilde a-\eta(a))\ge K$.
+
+\emph{Lemma \lbl{red:standard-model}} (\src{02:435}):
+$\mathcal T$ is recursive, and $\Z$ with $T_a=aP$ is a model.
+
+\emph{Lemma \lbl{red:compactness}} (\src{02:545}):
+if every finite test succeeds, then there are an elementary extension, a
+model $R\models\mathcal T$, a root $\mathbf a\in R^n$, and an embedding
+$R\hookrightarrow\sQ$ whose image satisfies $\Phi$.
+
+\emph{Lemma \lbl{red:coarsening}} (\src{02:643}):
+let $q\notin S_K$ be an ambient prime counted by some
+$M_K(\widetilde s_i)$, and $r$ a tested element with $v_q(\widetilde r)$
+odd, as in \lbl{red:odd-r}.  Then some branch $\mathfrak p\in\{\mathfrak p_\pm\}$
+and some place $v_*$ above $q$ satisfy
+\[
+ D'\in r^l(R_F)_{\mathfrak p}\ \Longrightarrow\ v_*(\widetilde D')\ge l
+\]
+for all ordinary $l\ge1$.  Moreover, tested-formal points reduce to $O$ at
+$v_*$.
+
+\emph{Proposition \lbl{red:index-congruence}} (\src{02:722}):
+for every $q$ counted by $M_K(\widetilde s_i)$ and every $a\in R$, the
+element $\widetilde a$ is $q$-integral and $v_q(\widetilde a-\eta(a))\ge K$.
+
+\emph{Proposition \lbl{red:finite-test-success}} (\src{02:755}):
+if all tests for $f$ are solvable, then $f$ has a zero in $\Z^n$.
+
+\paragraph{(b) Idea.}
+The theory $\mathcal T$ says, in ring language, everything the integers
+satisfy that the proof needs:
+\begin{itemize}
+\item the point axioms;
+\item for each $K$, a representation axiom: three slopes whose thirteen
+contact values are multiplier times tested prime;
+\item at each tested prime, two residue branches carrying the paired
+elliptic tests.
+\end{itemize}
+The tests are the finite fragments of the Skolemized $\mathcal T+f(\mathbf a)=0$
+evaluated on ground terms.  They are answered by rational-solvability queries,
+with $\Phi$ imposed on every ground term (constraints (a)--(d),
+\src{02:518--524}).  Compactness \cite{Marker2002} turns ``all tests succeed'' into a model
+$R$ inside $\sQ$.  Two connections then do the work.  An ambient contact
+prime $q$ is linked to a tested branch by an odd valuation and pole parity.
+That branch is linked to the index map by the local comparison.
+
+\paragraph{(c) Key tricks.}
+\begin{enumerate}
+\item \emph{The ``$h-4$'' trick} (proof of \lbl{red:local-comparison},
+\src{02:178--218}).  Test (ii) uses only additivity of $\eta$.  It gives
+$v_q(\eta((h-4)a))\ge K$, hence
+\[
+ V_a:=\eta(ha)\equiv4\eta(a),\qquad V_1\equiv4\pmod{q^K}.
+\]
+So $V_a/V_1$ is $q$-integral and congruent to $\eta(a)$, because $q\ne2$.
+Integrality is exactly the hypothesis that the truncated-log estimate
+(\lbl{ell:truncation}) needs.  Test (i) then identifies $\widetilde a$ with
+$V_a/V_1$ to precision $K$.  The same $h$ must serve both $a$ and $1$; this
+is why $h,j_0$ are chosen independently of $a$ (\src{02:220}).
+\item \emph{Odd contact forces an odd tested value} (\src{02:623--632}).
+Fix $q\notin S_K$, and let $t$ be the smaller of $v_q(\widetilde u_i)$ and
+$v_q(\widetilde v)$.  The minimum of the five contact valuations equals
+$t$, because some pair of forms has unit determinant.  If some contact
+depth is odd, the five valuations do not all have the same parity, so
+one is odd.  Its factor $k$ is a $q$-unit, so $v_q(\widetilde r)$ is odd.
+\item \emph{Coarsening} (proof of \lbl{red:coarsening}, \src{02:656--717}).
+$R$ may have poles at $q$.  Let $J\subset\sZ$ be the convex subgroup
+generated by the negative values of $v_q$ on $\widetilde R\setminus\{0\}$; this is an
+external construction.  Pole parity, applied to $b$ and $ab$, shows that
+every ring valuation lying in $J$ is even.  So the odd $v_q(\widetilde r)$
+lies outside $J$, and is positive.  The coarsened valuation
+$w_*:{}^*F\to\sZ/J$ is $\ge0$ on $R_F$.  Its center is a prime of $R_F$
+containing $r$.  Since $R_F/rR_F\simeq(R/rR)^2$, the center is exactly
+$\mathfrak p_+$ or $\mathfrak p_-$.
+\item \emph{One $\delta$ for all $A$} (\src{02:792--840}).  The internal
+universal statement ``every prime counted by $M_K(\widetilde s_i)$ divides
+$\delta$ to order $\ge K$'' is established, and then the transferred
+finite-product fact gives $M_K(\widetilde s_i)^K\mid\delta$.  The exponent
+$c$ must be fixed, because $K\ge cD$ is chosen once (\src{02:264--266}).
+\end{enumerate}
+
+\inwords{The ring $R$ may be wildly nonstandard.  Yet at every prime that
+matters for heights, it is locally indistinguishable from its own elliptic
+indices.}
+
+\checkhead
+\begin{itemize}
+\item \emph{Expressibility} (\src{02:407--433}).  Every axiom of
+$\mathcal T$ must be first-order in rings: no valuation function, and
+fixed exponents only.  The branch localizations must be defined via
+$R/rR$ rather than via an ambient valuation.
+\item \emph{The tests} (\src{02:503--543}).  Skolemization is effective.
+The witnesses for $\Phi$ are auxiliary and do \emph{not} generate new
+ground terms.  The DNF and sum-of-squares conversion is correct.
+\item \emph{Soundness of a failed test} (\src{02:540}).  This uses
+\lbl{red:standard-model} and Proposition \lbl{par:pole-parity}(1); the
+latter is the conditional input.
+\item \emph{Many-sorted ambient structure} (\src{02:63--73}).  Every
+transferred fact must be a first-order truth of the standard structure
+with ordinary parameters.  In particular: the formal estimates only for
+integer multiples of $P,P^\sigma$, and no infinite series (\src{02:135--140});
+the canonical-height comparison (\src{02:851--857}); and the finite-product
+divisibility fact (\src{02:802--814}).
+\item \emph{Coarsening.}  Check the claims ``$J\ne0$ implies $J\supseteq\Z$''
+and ``a positive class in $\sZ/J$ exceeds every ordinary $l$''
+(\src{02:705--711}).  Check that reduction to $O$ at the good model is
+$v_*(x)<0$ (\src{02:713--716}).
+\item \emph{$S_K$} (\src{02:597--604}).  It must contain the $\Phi$
+exceptions, the supports of $\Kmult$, the primes needed for unit
+determinants, the bad primes, and the primes $\le K+1$ together with $S_E$.
+\item \emph{Constants.}  $C_f$, $H_K$ and $K\ge cD$ are ordinary, and the
+final constant is independent of $A$ and $\mathbf a$ (\src{02:838--840}).
+Check the step $2\widehat h(P)B^2\le CB+C'$ (\src{02:862}).
+\item Our audit's verdict on this section: valid given its inputs.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{Preprint \S3: pole parity (\src{03-parity.tex}, 718 lines)}
+
+\paragraph{(a) Main statements.}
+\emph{Proposition \lbl{par:pole-parity}} (\src{02:477}).  There are a
+positive existential ring formula $\Phi(b)$ with rational coefficients and
+a finite set $S_1$ such that:
+\begin{enumerate}[label=(\arabic*)]
+\item $\Q\models\Phi(b)$ for every $b\in\Z$;
+\item if $b\in\Q^\times$ satisfies $\Phi$ and $q\notin S_1$, then
+$v_q(b)<0$ implies $v_q(b)\in2\Z$.
+\end{enumerate}
+
+\emph{The formula} (\src{03:50--61}).  $\Phi(b)$ holds if $b=0$, or if for
+some multipliers $m\in\mathcal M$, $m_d\in\mathcal D_m$ and some
+$t,e\in\Q$ we have
+\[
+ d=m_db,\quad b'=mb,\quad U=b\,\frac{1-dt^2}{1+dt^2},\quad H'=b'(b'-U^2),
+ \quad 1+dt^2\ne0,\ eH'\ne0,
+\]
+and both $E_e$ and $E_{eH'}$ have a rational point with
+$x\in b'\Q^{\times2}$.  Here $E_l:y^2=x(x-l)(x+3l)$.
+
+\emph{Supporting lemmas.}
+\begin{itemize}
+\item \lbl{par:soundness} (\src{03:71}): property (2), for any lists.
+\item \lbl{par:cross-squares} (\src{03:170}): mutual local squares of
+$\beta,\theta$.
+\item \lbl{par:descent} (\src{03:300}): under matrix conditions,
+$\dim_{\F_2}\Sel_2(E_l/\Q)=3$, and $(\beta,1)$ is a Selmer class outside the two-torsion classes.
+\item \lbl{par:global-point} (\src{03:464}): that class comes from a
+rational point.
+\item \lbl{par:simultaneous-matrices} (\src{03:543}): one $n$ works for both
+$l=n$ and $l=n\theta$.
+\end{itemize}
+
+\paragraph{(b) Idea.}
+\emph{Soundness.}  If $v_q(b)=k<0$ is odd, then $v_q(U)=k$ and
+$v_q(H')=3k$.  So $e$ and $eH'$ have opposite valuation parities.  On the
+twist whose parameter has even valuation, rescale to a unit parameter.
+There every nonzero $x$ has even valuation, which contradicts
+$x\in b'\Q_q^{\times2}$.
+
+\emph{Completeness.}  For an integer $b$, choose the multipliers and $t$ by
+weak approximation, so that $b'$ and $H'$ are local squares at each other's
+odd-support primes.  Then build a squarefree $n$ for which both $E_n$ and
+$E_{n\theta}$ have $2$-Selmer rank exactly one beyond torsion, with $(\beta,1)$
+as the extra class.  The $2$-converse and Cassels--Tate then promote the
+Selmer class to a point.
+
+\paragraph{(c) Key computations.}
+\begin{itemize}
+\item \emph{Selmer equations.}  In normalized coordinates
+$(3^\delta\prod q_i^{u_i},\prod q_i^{v_i})$ (\src{03:384}), the local
+conditions read
+\[
+ Ku+D_\lambda v=\delta\lambda,\qquad Nv=0,\qquad (\lambda+s)^{\mathsf t}v=0,
+\]
+with $K+K^{\mathsf t}=ss^{\mathsf t}+D_s$ from quadratic reciprocity
+(\src{03:282}).  The matrices follow Monsky's viewpoint
+\cite[Appendix]{HeathBrown1994}.  The target $\ker K=\langle\mathbf1,\mathbf1_B\rangle$ and
+$\lambda\notin\operatorname{im}K$ force $v=0$, $\delta=0$,
+$u\in\ker K$.  Hence there are at most $8$ classes, and
+$\tau_1,\tau_2,(\beta,1)$ attain the bound.
+\item \emph{The converse step} (\src{03:470--514}).  By
+$r+\dim\Sha[2]=1$, the $2^\infty$-Selmer corank is $\le1$.  The pointwise
+$2$-converse (hypotheses $C(\Q)[2]\ne0$ and corank $\in\{0,1\}$) gives
+$\Sha$ finite.  Cassels--Tate on the finite $2$-primary part then makes
+$\dim\Sha[2]$ even, so $\Sha[2]=0$ and $r=1$.
+\item \emph{Simultaneous matrices} (\src{03:585--704}).  The two kernel
+targets reduce to $K\mathbf1_B=0$ plus nonsingularity of the deleted
+matrix of $K^\#=K+\lambda a^{\mathsf t}$.  The $B$--$I$ block is built from
+a basis of the even-sum hyperplane.  Adding $J$ toggles diagonal entries
+independently, and a nonzero multilinear polynomial over $\F_2$ has a
+non-root.
+\end{itemize}
+
+\inwords{Odd poles are detected by a sign-type invariant of two quadratic
+twists.  Integers pass because one can always choose a twist pair whose
+Mordell--Weil groups contain the needed square class.  ``Always'' relies on
+a converse theorem that rules out a Selmer class coming from an infinite
+$\Sha$.}
+
+\checkhead
+\begin{itemize}
+\item Positivity of $\Phi$: the disjunction over multipliers is finite, and
+$\neq$ is encoded as $az=1$ (\src{03:63--69}).
+\item The valuation case analysis in \lbl{par:soundness}, including $t=0$
+and $q\ne3$ (\src{03:76--103}).  The audit tested soundness on 18k random
+$q$-adic cases.
+\item The local Kummer images at $q\nmid 6l$, at $q\mid l$, at $3$, at $2$
+(necessity only), and at $\infty$ (\src{03:328--390}).
+\item Exact hypotheses of \cite[Thm.~1.1]{PointwiseTwoConverse} as quoted
+(\src{03:457--462}): full $2^\infty$-Selmer corank, not just $\Sel_2$.
+The family $E_l$ is non-CM, with additive reduction at every $q\mid l$.
+\item Cassels--Tate alternation for the principal polarization
+(\src{03:496--514}).  The locator \cite[Cor.~9]{PoonenStoll1999} is
+unverified; it is not load-bearing, since Cassels \cite{Cassels1962}
+suffices.
+\item The Dirichlet realization of prescribed Legendre symbols with
+reciprocity-consistent reverses (\src{03:692--703}).
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{Preprint \S4: the five-point height estimate (\src{04-height.tex}, 1326 lines)}
+
+\paragraph{(a) Main statement.}
+\emph{Theorem \lbl{hei:height}} (\src{02:232}).  There are five distinct
+points $\Cpts\subset\PP^1(\Q)$, including $\infty$, a finite set $S$, and
+constants $H,c>0$ with the following property.  For each
+$s=(u:v)\in\PP^1(\Q)\setminus\Cpts$,
+\[
+ h(s)\le H\,M_S(s)^c,
+\]
+where $M_S(s)$ is the product of the primes $q\notin S$ at which some
+$v_q(L_b(u,v))-\min\{v_q(u),v_q(v)\}$ is odd.
+\emph{Corollary \lbl{hei:enlarge-exceptions}} (\src{02:270}): enlarging
+$S$ changes $H$ but not $c$.
+
+\inwords{If a rational point of $\PP^1$ meets the five points to odd order
+only at a few primes, its height is polynomially bounded in the product of
+those primes.  In terms of the naive height $e^{h(s)}$, this is an
+exponential-in-a-power bound; the audit calls it ``exponential-abc
+strength, not abc strength''.  The proof uses a finiteness statement that
+need not be effective (\src{04:680}).}
+
+\emph{Intermediate results.}
+\begin{itemize}
+\item \lbl{hei:fiber-field} (\src{04:303}): the fiber field $K_0$ has
+bounded degree, is unramified outside $S\cup\{q\mid M\}$, and fibers have
+good reduction outside $S$.
+\item \lbl{hei:base-height} (\src{04:364}):
+$h(\pi(y))\le C(1+\max\{0,h_{\mathrm F}(\mathcal A_y)\})$.
+\item \lbl{hei:hom-field} (\src{04:584}): a Galois field $L$ of bounded
+degree, unramified outside $T$, containing all homomorphisms between
+conjugates.
+\item \lbl{hei:sign-splitting} (\src{04:766}): a character $\chi$ of order
+$\le CM$ and a cochain $\beta$ with $\beta^2=\chi$ and $\partial\beta=\epsilon$.
+\item \lbl{hei:compatibility} (\src{04:986}).
+\item \lbl{hei:level-bound} (\src{04:1043}): $N\le CM^a$, with $a=2$ allowed.
+\item \lbl{hei:modular-factor} (\src{04:1170}): $J_1(N)\sim_{L'}A\times D_0$.
+\item Final bound (\lbl{hei:faltings-final}, \src{04:1293}):
+$h_{\mathrm F}(A)\le CM^C$.
+\end{itemize}
+
+\paragraph{(b) Idea.}
+\begin{enumerate}
+\item Take the Shimura curve $X$ of the indefinite quaternion algebra of
+discriminant $210$.  It has genus $5$.  Its full Atkin--Lehner quotient
+$X^*$ is $\PP^1$ over $\Q$, with exactly five branch values, all rational;
+these form $\Cpts$.
+\item At fine level $Y\to X$ there is a principally polarized QM abelian
+surface family $\mathcal A\to Y$.  Fibers over the same point of $X^*$ are
+isogenous.
+\item For rational $s$, the local equation $t=z^2$ shows that only odd
+contact ramifies the fiber field (\lbl{hei:fiber-field}).
+\item A theta-height comparison (\lbl{hei:base-height}) shows that
+$h(s)$ is controlled by the Faltings height of a fiber $A$.
+\item If the centralizer of $B$ in $\operatorname{End}^0(A)$ is an
+imaginary quadratic field, then $A$ is isogenous to $E^2$ with $E$ CM, and
+its height is uniformly bounded.  Otherwise $\operatorname{End}^0=B$, and $A$ is isogenous to all its Galois
+conjugates.  The descent obstruction is a $\pm1$ cocycle, split by a
+cochain $\beta$ with controlled order and inertia.  This yields an odd
+two-dimensional $2$-adic representation $r_2$, de Rham with Hodge--Tate
+exponents $0,1$.
+\item Modularity gives a weight-$2$ newform of level $N\ll M^2$, and $A$
+is a factor of $J_1(N)$ over a field of degree $\ll M$.
+\item Javanpeykar bounds $h_{\mathrm F}(J_1(N))\ll N^{12}$.  The
+Gaudron--R\'emond isogeny theorem, with its explicit dependence on the
+dimension, transfers this to $h_{\mathrm F}(A)\ll M^C$.
+\end{enumerate}
+The final step follows von K\"anel's modular height strategy
+\cite{vonKaenel2021}.  The main external tools are Pazuki's theta height
+\cite{Pazuki2012}, Javanpeykar's bound for Belyi curves
+\cite{Javanpeykar2014}, the Gaudron--R\'emond isogeny theorem
+\cite{GaudronRemond2014}, Faltings' theorems \cite{Faltings1983}, and
+Carayol's local--global compatibility \cite{Carayol1986}.  The descent
+step follows the theory of building blocks \cite{Ribet1992,Pyle1995}.
+
+\paragraph{(c) Key tricks.}
+\begin{itemize}
+\item \emph{Parity from ramification index two} (\src{04:312--346}).  After
+an unramified extension the local equation is $t=z^2$.  Even contact
+gives unramified lifts.
+\item \emph{Normalize degrees, not isogenies} (\src{04:729--756}).  With
+$a_g=(\deg\mu_g)^{-1/4}$, the discrepancy is a pure sign, so no bound on
+$\deg\mu_g$ is needed.
+\item \emph{Cheap splitting} (\src{04:781--851}).  Choose an odd character
+modulo each odd prime of $T$ where the Brauer class is nonzero.  The order
+is then $\le 2\prod_{q\in T,\,q\ne2}(q-1)\le CM$.  A quadratic twist removes
+inertia at primes outside $T$.
+\item \emph{Level bound} (\src{04:1062--1146}).  At large $q\in T$ the
+representation is tame, so the exponent is $\le2$.  At the finitely many
+small primes, a uniform upper-ramification cut (from bounded-degree local
+fields and the semistable reduction criterion) gives a uniform Swan bound.
+At $q=2$ the conductor is read from $r_3$, via \lbl{hei:compatibility}.
+\end{itemize}
+
+\checkhead
+\begin{itemize}
+\item \emph{Geometry} (\src{04:85--172}).  No elliptic points (because
+$\Q(i)$ and $\Q(\sqrt{-3})$ do not embed in $B$).  Area $8$ gives $g=5$.
+Then Riemann--Hurwitz, and five distinct labels $30,42,70,105,210$ (see
+\S\ref{toy:rh}).  Cross-check against Long--Maclachlan--Reid (signature
+$(0;2^5;0)$) and Nualart Riera \cite{LongMaclachlanReid2006,Nualart2015}.
+\item The symplectic embedding and the choice of level (\src{04:199--247}).
+\item The theta-height argument and its uniformity in the field of
+definition (\src{04:372--549}).  This is the most technical analytic step.
+\item The CM case: non-effective but uniform (\src{04:658--680}).
+\item The hypotheses of the modularity input (\src{04:902--954}): odd,
+irreducible, de Rham with distinct weights, finitely ramified.  If you
+prefer, check the classical replacement instead (see \S\ref{sec:diagram}).
+\item The conductor exponent at small primes.  The citation of the
+semistability criterion (\src{04:1115}) is better given as SGA7~IX~4.7,
+per the audit.
+\item The arithmetic $N^{12}$ (from $\deg_B\le CN^2$ and $g\le CN^2$), and
+the bound $\log\deg\phi\le CM^C$ from \lbl{hei:gr} (\src{04:1207--1295}).
+\item The audit found no error here, and no cheap counterexample family.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{Preprint \S5: the rank-one curve (\src{05-elliptic.tex}, 189 lines)}
+
+\paragraph{(a) Statements.}
+\emph{\lbl{ell:rank}}: $\rank E(F)=1$; fix $m,P$ with $mE(F)=\Z P$.
+
+\emph{\lbl{ell:formal}}: there is a finite set $S_E$ with the following
+property.  Let $p\notin S_E$, let $v\mid p$ with $v(p)=1$, and let
+$nP,n'P$ reduce to $O$ with $n'\ne0$.  Then
+\[
+ v\Bigl(\frac{z(nP)}{z(n'P)}\Bigr)=v_p(n/n').
+\]
+If moreover $p>K+1$ and $v_p(n/n')\ge0$, then $\ell_K(z(n'P))\ne0$ and
+\[
+ v\Bigl(\frac{\ell_K(z(nP))}{\ell_K(z(n'P))}-\frac n{n'}\Bigr)\ge K.
+\]
+The same holds for $E^\sigma,P^\sigma$.
+
+\paragraph{(b) Idea.}
+The rank comes from a $2$-isogeny descent over $\Q(\sqrt2)$, which is
+possible because $\Z[\sqrt2]$ is a PID and totally positive units are
+squares.  One finds $|\operatorname{im}\alpha|=8$ and
+$|\operatorname{im}\alpha'|=1$, hence $4\cdot2^{\rank}=8$.  The formal
+statements come from the logarithm being valuation-preserving on the
+formal kernel when $p>2$.
+
+\paragraph{(c) Key computation.}
+For $t>K$ and $p>K+1$ one has $t-1-v_p(t)\ge K$ (\lbl{ell:tail-exponent}).
+Hence $v(\ell(Z)-\ell_K(Z))\ge v(Z)+K$ whenever $v(Z)\ge1$
+(\lbl{ell:tail}), and the truncation error is negligible.
+
+\checkhead
+The explicit point $Q$ and the sign argument (\src{05:67--75}).  The
+computation at $\mathfrak d$ using $-4=3$, a nonsquare in $\F_7$
+(\src{05:84--91}).  The tail inequality, including the edge case $p=K+2$.
+The audit verified \S5 by exact computation, including a $400$-digit
+$r$-adic test at $r=17,23$.
+
+%----------------------------------------------------------------------
+\subsection{Preprint \S6: prime patterns (\src{06-primes.tex}, 705 lines)}
+
+\paragraph{(a) Statements.}
+\emph{Lemma \lbl{pri:pattern}} (\src{06:21}).  There is a finite
+$\Kmult\subset\Z_{>0}$ with the following property.  For every $A\in\Z$ and
+every real $B>0$ there are integers $u_1,u_2,v$, with $v\ne0$ and
+$u_3=Av-u_1-u_2$, such that each of the thirteen numbers $v$ and
+$L_b(u_j,v)$ ($b\ne\infty$) equals $\pm kr$ with $k\in\Kmult$ and $r>B$
+prime.  Each such $r$ splits in $F$, is good for $E$ and $E^\sigma$, and
+at either place above $r$
+\[
+ \gcd(d_1,d_2)\mid4,\qquad r\nmid d_1d_2,
+\]
+where $d_1,d_2=\#\widetilde E(\F_r),\#\widetilde E^\sigma(\F_r)$.
+
+\emph{Corollary \lbl{pri:integer-tests}} (\src{06:53}).  At each place
+above such an $r$ (large enough for precision $K$), take $j_0=d_2$ and
+\[
+ h\equiv0\pmod{d_1},\qquad h\equiv4\pmod{d_2r^K}.
+\]
+Then conditions (i) and (ii) of \lbl{red:local-comparison} hold in $\Z$
+for all $a$.  Combining the two results gives
+\emph{Corollary \lbl{pri:integer-coverage}}.
+
+\paragraph{(b) Idea.}
+Take $r\equiv1\pmod8$ and $r\equiv3\pmod7$.  Then $r$ splits in $F$, and
+$7=dd^\sigma$ is a nonsquare mod $r$.  So $E$ and $E^\sigma$ reduce to
+opposite twists of $y^2=x^3-x$, with orders $r+1\pm2a$ where $a^2+b^2=r$.
+The $2$-part of the gcd is exactly $4$.  An odd common factor $l$ needs
+$l\mid a$ and $b^2\equiv-1\pmod l$.  Small such $l$ are excluded by
+congruences.  Large $l$ are removed by an upper sieve.  The lower bound
+for thirteen simultaneous prime values of linear forms in $(u_1,u_2,v)$
+comes from Green--Tao--Ziegler \cite{GreenTao2010,GreenTao2012,GreenTaoZiegler2012}.
+
+\paragraph{(c) Key tricks.}
+\begin{itemize}
+\item \emph{Order of choices} (\src{06:121--125}): first $\Kmult$, then
+$A$, a box and a congruence class, then the cutoff $L$, and finally the
+scale $X$.  $\Kmult$ must be independent of $A$, because it appears in the
+single axiom scheme of $\mathcal T$.
+\item \emph{Lower versus upper bounds.}  GTZ gives
+$N_{A,L}(X)\ge c_A(\log L)^{-C_0}X^3/(\log X)^{13}$ (\lbl{pri:lower}).  The
+patterns with a bad $l>L$ number at most $C_AX^3/(L(\log X)^{13})+o(\cdot)$
+(\lbl{pri:total-loss}).  Choose $L$ large.  There is no parity barrier,
+because the sieve is used only for upper bounds.
+\item \emph{(ours)} Why three slopes rather than one?  If $A=u/v$, then
+$L_b(Av,v)=v\,L_b(A,1)$ is a multiple of $v$.  Such values could not all
+be $\pm k\cdot(\text{large prime})$ alongside $v$ itself.  Three summands
+give three free variables, and thirteen forms with pairwise
+non-proportional linear parts (\src{06:186--205}), which is the
+finite-complexity setting of GTZ.
+\end{itemize}
+
+\checkhead
+\begin{itemize}
+\item Pairwise independence of the thirteen forms modulo $p$ for $p$ above
+a threshold independent of $A$ (\src{06:198--205}).
+\item The catalogue construction of $\Kmult$ (\src{06:223--250}).
+\item The local factors $\beta_p$ (\src{06:392--406}) and the negligibility
+of prime powers.
+\item Uniformity of the two upper sieves in $L$, $r$ and $l$
+(\src{06:550--668}).
+\item The cited form of GTZ (\src{06:355--378}).  The audit suggests adding
+Manners or Leng--Sah--Sawhney as a backstop to the blog-hosted 2024
+erratum \cite{GreenTaoZiegler2024Erratum}.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{Preprint \S7: Turing degree and normal forms (\src{07-consequences.tex}, 108 lines)}
+
+\paragraph{(a) Statement} (\lbl{thm:degree-normal-form}, \src{07:197}).
+$\mathrm{H10}(\Q)$ has Turing degree $0'$.  So do two restricted problems:
+total degree $\le4$, and $\sum_i q_i^2$ with $\deg q_i\le2$ given as a
+list.  No bound is placed on the number of variables or on coefficients.
+
+\paragraph{(b,c) Idea.}
+The parallel search of \S2 with an oracle gives
+$\mathrm{H10}(\Z)\le_T\mathrm{H10}(\Q)$.  The fixed data are independent
+of $f$, so there is one oracle machine.  Both sets are c.e.  An arithmetic
+circuit with one new variable per gate gives many-one reductions
+$\mathrm{H10}(\Q)\le_m S_2\le_m H_{\le4}$.
+
+\checkhead
+That the fixed data are hardcoded, not searched for (\src{02:461--467},
+\src{07:226--228}).  The preprint itself notes that many-one completeness of
+$\mathrm{H10}(\Q)$ is \emph{not} claimed (\src{07:289--296}).
+
+%======================================================================
+\section{Worked toy illustrations}\label{sec:toys}
+
+\subsection{Why the point axioms exclude $\Z[1/2]$, but not nonstandard denominators \emph{(ours)}}
+Take $R=\Z[1/2]\subset\Q$ in the standard structure, embedded by the
+identity, as in the setting of \src{02:63--78}.  Then
+$F_R=\Q(\sqrt2)=F$.  The axioms demand $T_{1/2}\in mE(F)=\Z P$, say
+$T_{1/2}=nP$.  Additivity gives $P=T_1=2T_{1/2}=2nP$.  Since $P$ has
+infinite order, $2n=1$, which is impossible.
+
+The same argument works for any standard rational $1/k$ with $k>1$, since
+$k\,\eta(1/k)=\eta(1)=1$ has no solution in $\sZ$.  So a model of the
+point axioms contains no standard non-integral rationals.
+
+The argument says nothing about an element such as $1/N$ with $N\in\sZ$
+nonstandard.  Then $N$ need not lie in $R$, and additivity only constrains
+$\eta(k/N)=k\,\eta(1/N)$ for standard $k$.  This is why the preprint needs
+the rest of its machinery: local comparisons, height bounds, and canonical
+height growth.  The condition $T_a\in mE(F_R)$, rather than
+$T_a\in E(F_R)$, is what makes $\eta$ land in $\sZ$ (\src{02:75--78}).
+
+\subsection{The rank-one curve over $\Q(\sqrt2)$}
+The data are $d=75-53\sqrt2$, with $N(d)=75^2-2\cdot53^2=7$, and $d>0$ at
+both real embeddings.  The preprint gives (\src{05:67--70})
+\[
+ w=-5+4\sqrt2=d(1+\sqrt2)^3,\qquad w^3-w=-8d,\qquad
+ Q=(-dw,\ 2\sqrt2\,d^2)\in E(F).
+\]
+To check this: $(1+\sqrt2)^3=7+5\sqrt2$, and $(75-53\sqrt2)(7+5\sqrt2)=-5+4\sqrt2$.
+Also $w^3=-605+428\sqrt2$, so $w^3-w=-600+424\sqrt2=-8d$.  Finally
+$x^3-d^2x=-d^3(w^3-w)=8d^4=y^2$.
+
+The class of $-dw$ has signs $(-,+)$ at the two real embeddings.  The
+torsion classes $1,-1,d,-d$ have equal signs at both.  So
+$|\operatorname{im}\alpha|=8$.  Together with $\operatorname{im}\alpha'=1$
+and \lbl{ell:isogeny-index}, this gives $8=4\cdot2^{\rank}$, so the rank
+is $1$.
+
+\subsection{Integer witnesses at a small split prime \emph{(ours, computed)}}
+Take $r=17$.  Then $17\equiv1\pmod8$ and $17\equiv3\pmod7$, as in
+\lbl{pri:prime-residues}.  The square roots of $2$ mod $17$ are $6$ and
+$11$.  At the place $\sqrt2\mapsto6$ we have $d\mapsto12$ and
+$d^\sigma\mapsto2$, with $12\cdot2\equiv7$.  A direct point count gives
+\[
+ d_1=\#\widetilde E(\F_{17})=20,\qquad d_2=\#\widetilde E^\sigma(\F_{17})=16.
+\]
+This agrees with $r+1\pm2a$ for $17=1^2+4^2$, $a=\pm1$.  Here
+$\gcd(20,16)=4$ and $17\nmid d_1d_2$.
+
+For $K=1$, Corollary \lbl{pri:integer-tests} asks for
+$h\equiv0\pmod{20}$ and $h\equiv4\pmod{16\cdot17}$.  Take $h=820$ and
+$j_0=16$.  Then $hP$ and $haP$ lie in the formal kernel of $E$, and
+$(h-4)a=816a=3\cdot16\cdot17\cdot a$.  So
+$v_{17}\bigl((h-4)a/d_2\bigr)\ge1=K$, as test~(ii) requires.
+
+At the other place the roles of the two curves swap: $d_1=16$, $d_2=20$,
+$h=1024$, $j_0=20$.  The lemma itself uses only primes above a large
+threshold; $r=17$ serves only as illustration.
+
+\subsection{The genus-$5$ cover and its five branch values}\label{toy:rh}
+The Eichler area formula gives
+$\frac16\prod_{p\mid210}(p-1)=\frac16\cdot1\cdot2\cdot4\cdot6=8=2g-2$,
+so $g(X)=5$ (\src{04:93--97}).
+
+$\mathcal W\simeq(\Z/2)^4$ has order $16$, and every nontrivial stabilizer
+has order $2$.  Riemann--Hurwitz reads
+\[
+ 8=16\bigl(2g(X^*)-2\bigr)+r\cdot8
+ \iff 2g(X^*)-2+\tfrac r2=\tfrac12,
+\]
+so $r=5-4g(X^*)$.
+
+Fixed points of $w_m$ for $m=30,42,70,105,210$ exist because
+$\Q(\sqrt{-m})$ embeds in $B$.  For example, for $m=30$ the only prime of
+$210$ not dividing $m$ is $7$, and $-30\equiv5$ is a nonsquare mod $7$
+(\src{04:139--146}).  So $r\ge5$, which forces $g(X^*)=0$ and $r=5$.  Each
+branch value is rational because its label is Galois-stable.
+
+Note that the five points $\Cpts$ are not written down explicitly in the
+preprint.  Only $\infty$ is normalized.
+
+\subsection{Pole parity at $b=1/q$}
+Take $q\notin S_1$ and $b=1/q$.  For any witnesses, $v_q(d)=v_q(b')=-1$
+and $v_q(U)=-1$, so $v_q(H')=-3$.  One of $e$ and $eH'$, call it $l$, has
+even valuation $2a$.  On $Y^2=X(X-L)(X+3L)$ with $L=q^{-2a}l$ a unit, every
+nonzero $X$ has even valuation.  But the required $x$ lies in
+$b'\Q^{\times2}$, which has odd valuation.  So $\Phi(1/q)$ fails.
+
+The argument gives no obstruction for $b=1/q^2$, and
+\lbl{par:pole-parity}(2) does not exclude even poles (\src{02:488}).
+
+\subsection{What the height estimate says when $M=1$ \emph{(ours)}}
+If every contact order of $s$ outside $S$ is even, then $M_S(s)=1$ and
+$h(s)\le H$.  So only finitely many such $s$ exist.  In the reduction,
+$M_K(\widetilde s)^K\mid\delta$ means that the contact radical is at most
+$|\delta|^{1/K}$, a ``$K$-th root'' of a single fixed error term.  This
+is why the exponent $c$ must be independent of $K$ (\src{02:259--266}).
+
+%======================================================================
+\section{Audit status and open points}\label{sec:audit}
+
+\noindent\begin{minipage}{\textwidth}
+\paragraph{What was checked} (from \src{../AUDIT.md}).
+\begin{center}\small
+\begin{tabular}{p{3.2cm}p{11.2cm}}
+\toprule
+Part & Finding\\
+\midrule
+\S2 and \S7 & Valid given the inputs.  The test conditions are ring-existential.  The transferred facts are first-order.  The choice $K\ge cD$ and the step $B^2\ll B$ are correct.  Turing reduction, not a Diophantine model.\\
+\S3 & No error.  Soundness was tested on 18k random $q$-adic cases.  $\dim\Sel_2=3$ was checked on 9 values of $l$.  480 randomized matrix trials passed.  Completeness depends on \cite{PointwiseTwoConverse}.\\
+\S4 & No error.  Follows von K\"anel's method.  Level $N\ll M^2$.  Exponential-abc strength.  No cheap counterexample family was found.\\
+\S5 & Verified by exact computation; $400$-digit $r$-adic test at $r=17,23$, including $p=K+2$.\\
+\S6 & Correct.  GTZ for $13$ fixed forms in $3$ variables, so no parity barrier.  The sieve bounds are uniform as claimed.\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{minipage}
+
+\paragraph{What is conditional.}
+The theorem depends on \cite[Thm.~1.1]{PointwiseTwoConverse}.  Known
+$2$-converse results cover CM families or special Heegner families.  The
+family here is non-CM, with additive reduction at every prime dividing
+$l$.  The alternative \cite{UnrestrictedTwoConverse} is also an OpenAI
+preprint.  The audit of the pointwise $2$-converse found no error, with
+sketched infrastructure gaps.
+
+The Fontaine--Mazur input \cite{OddRegularFontaineMazurAtTwo} is cited
+but not needed.  The audit recommends citing the classical route, noting
+that $\ell=2$ is the hardest choice since $B$ is ramified at $2$.  The
+Fontaine--Mazur preprint itself needs expert review of three points:
+characteristic-$2$ patching, marked-line connectedness, and classicality
+transport (which relies on another unrefereed preprint).
+
+\paragraph{Minor fixes suggested by the audit.}
+\begin{enumerate}
+\item \src{01:183}: ``elementary extension of the rational field'' should
+read ``of the many-sorted structure''.  \S2 states this correctly.
+\item \S6: add Manners or Leng--Sah--Sawhney as a backstop to the
+blog-hosted GTZ erratum.
+\item \src{04:1115}: cite the semistability criterion to SGA7~IX~4.7.
+\item \S3: the locator ``Poonen--Stoll, Corollary~9'' is unverified.  It is
+not load-bearing.
+\end{enumerate}
+
+\paragraph{Suggested priorities for a referee \emph{(ours)}.}
+\begin{itemize}
+\item \S2, and the logic in particular: an expert in model theory.
+\item \S4: an arithmetic geometer.  This is the most technical part, and
+the theta-height and level-bound steps are where most of the length goes.
+\item The pointwise $2$-converse: separate expert review.  In the audit's
+words, it is ``the theorem's real foundation''.
+\end{itemize}
+
+%======================================================================
+\begin{thebibliography}{99}\small
+
+\bibitem{H10Q}
+OpenAI.
+\newblock Hilbert's tenth problem over the rational numbers.
+\newblock OpenAI Math Release preprint
+  OAI:Hilberts-tenth-problem-over-the-rational-numbers-October-6-2026, 2026.
+
+\bibitem{AlpogeBhargavaHoShnidman2026}
+L.~Alp\"oge, M.~Bhargava, W.~Ho, and A.~Shnidman.
+\newblock Rank stability in quadratic extensions and Hilbert's tenth problem
+  for the ring of integers of a number field.
+\newblock \emph{Invent. Math.} 243 (2026), 1129--1139.
+\newblock doi:10.1007/s00222-025-01392-3.
+
+\bibitem{Carayol1986}
+H.~Carayol.
+\newblock Sur les repr\'esentations $l$-adiques associ\'ees aux formes
+  modulaires de Hilbert.
+\newblock \emph{Ann. Sci. \'Ec. Norm. Sup\'er. (4)} 19 (1986), no.~3, 409--468.
+\newblock doi:10.24033/asens.1512.
+
+\bibitem{Cassels1962}
+J.~W.~S. Cassels.
+\newblock Arithmetic on curves of genus 1. {IV}. {Proof} of the
+  {Hauptvermutung}.
+\newblock \emph{J. Reine Angew. Math.} 211 (1962), 95--112.
+\newblock doi:10.1515/crll.1962.211.95.
+
+\bibitem{CornelissenZahidi2000}
+G.~Cornelissen and K.~Zahidi.
+\newblock Topology of Diophantine sets: remarks on Mazur's conjectures.
+\newblock In \emph{Hilbert's Tenth Problem: Relations with Arithmetic and
+  Algebraic Geometry}, Contemp. Math. 270, AMS, 2000, 253--260.
+\newblock doi:10.1090/conm/270/04377.
+
+\bibitem{DavisPutnamRobinson1961}
+M.~Davis, H.~Putnam, and J.~Robinson.
+\newblock The decision problem for exponential Diophantine equations.
+\newblock \emph{Ann. of Math. (2)} 74 (1961), no.~3, 425--436.
+\newblock doi:10.2307/1970289.
+
+\bibitem{Faltings1983}
+G.~Faltings.
+\newblock Endlichkeitss\"atze f\"ur abelsche Variet\"aten \"uber
+  Zahlk\"orpern.
+\newblock \emph{Invent. Math.} 73 (1983), no.~3, 349--366.
+\newblock doi:10.1007/BF01388432.  Erratum: ibid.\ 75 (1984), 381.
+
+\bibitem{GaudronRemond2014}
+\'E.~Gaudron and G.~R\'emond.
+\newblock Polarisations et isog\'enies.
+\newblock \emph{Duke Math. J.} 163 (2014), no.~11, 2057--2108.
+\newblock doi:10.1215/00127094-2782528.
+
+\bibitem{GreenTao2010}
+B.~Green and T.~Tao.
+\newblock Linear equations in primes.
+\newblock \emph{Ann. of Math. (2)} 171 (2010), no.~3, 1753--1850.
+\newblock doi:10.4007/annals.2010.171.1753.
+
+\bibitem{GreenTao2012}
+B.~Green and T.~Tao.
+\newblock The M\"obius function is strongly orthogonal to nilsequences.
+\newblock \emph{Ann. of Math. (2)} 175 (2012), no.~2, 541--566.
+\newblock doi:10.4007/annals.2012.175.2.3.
+
+\bibitem{GreenTaoZiegler2012}
+B.~Green, T.~Tao, and T.~Ziegler.
+\newblock An inverse theorem for the Gowers $U^{s+1}[N]$-norm.
+\newblock \emph{Ann. of Math. (2)} 176 (2012), no.~2, 1231--1372.
+\newblock doi:10.4007/annals.2012.176.2.11.
+
+\bibitem{GreenTaoZiegler2024Erratum}
+B.~Green, T.~Tao, and T.~Ziegler.
+\newblock Erratum for An inverse theorem for the Gowers $U^{s+1}[N]$-norm.
+\newblock Six-page author erratum, April 2024.
+\newblock \url{https://terrytao.wordpress.com/wp-content/uploads/2024/04/erratum-4.pdf}.
+
+\bibitem{HeathBrown1994}
+D.~R. Heath-Brown.
+\newblock The size of Selmer groups for the congruent number problem, II.
+\newblock \emph{Invent. Math.} 118 (1994), 331--370.
+\newblock With an appendix by P.~Monsky, pp.~365--370.
+\newblock doi:10.1007/BF01231536.
+
+\bibitem{Javanpeykar2014}
+A.~Javanpeykar.
+\newblock Polynomial bounds for Arakelov invariants of Belyi curves.
+\newblock \emph{Algebra Number Theory} 8 (2014), no.~1, 89--140.
+\newblock With an appendix by P.~Bruin.  doi:10.2140/ant.2014.8.89.
+
+\bibitem{Koenigsmann2016}
+J.~Koenigsmann.
+\newblock Defining $\mathbb Z$ in $\mathbb Q$.
+\newblock \emph{Ann. of Math. (2)} 183 (2016), no.~1, 73--93.
+\newblock doi:10.4007/annals.2016.183.1.2.
+
+\bibitem{KoymansPagano2026}
+P.~Koymans and C.~Pagano.
+\newblock Hilbert's tenth problem via additive combinatorics.
+\newblock \emph{J. Amer. Math. Soc.}, 2026.
+\newblock doi:10.1090/jams/1081.
+
+\bibitem{LongMaclachlanReid2006}
+D.~D. Long, C.~Maclachlan, and A.~W. Reid.
+\newblock Arithmetic Fuchsian groups of genus zero.
+\newblock \emph{Pure Appl. Math. Q.} 2 (2006), no.~2, 569--599.
+\newblock doi:10.4310/PAMQ.2006.v2.n2.a9.
+
+\bibitem{Marker2002}
+D.~Marker.
+\newblock \emph{Model Theory: An Introduction}.
+\newblock Graduate Texts in Mathematics 217, Springer, New York, 2002.
+\newblock doi:10.1007/b98860.
+
+\bibitem{Matiyasevich1970}
+Yu.~V. Matiyasevich.
+\newblock Diofantovost' perechislimykh mnozhestv [The Diophantineness of
+  enumerable sets].
+\newblock \emph{Dokl. Akad. Nauk SSSR} 191 (1970), no.~2, 279--282.
+
+\bibitem{Mazur1995}
+B.~Mazur.
+\newblock Speculations about the topology of rational points: an up-date.
+\newblock \emph{Ast\'erisque} 228 (1995), 165--181.
+
+\bibitem{Nualart2015}
+J.~Nualart Riera.
+\newblock \emph{On the Hyperbolic Uniformization of Shimura Curves with an
+  Atkin--Lehner Quotient of Genus 0}.
+\newblock PhD thesis, Universitat de Barcelona, 2015.
+
+\bibitem{OddRegularFontaineMazurAtTwo}
+OpenAI.
+\newblock Fontaine--Mazur modularity at the prime 2.
+\newblock OpenAI Math Release preprint
+  OAI:Fontaine-Mazur-modularity-at-the-prime-2-October-6-2026, 2026.
+\newblock Theorem~1.1 and Section~2.1.
+
+\bibitem{UnrestrictedTwoConverse}
+OpenAI.
+\newblock Goldfeld's analytic density conjecture and the $2$-converse for
+  elliptic curves.
+\newblock OpenAI Math Release preprint
+  OAI:Goldfelds-analytic-density-conjecture-and-the-2-converse-for-elliptic-curves-October-7-2026,
+  2026.
+\newblock Theorem~1.1.
+
+\bibitem{PointwiseTwoConverse}
+OpenAI.
+\newblock A pointwise $2$-converse for elliptic curves with rational
+  two-torsion.
+\newblock OpenAI Math Release preprint
+  OAI:A-pointwise-2-converse-for-elliptic-curves-with-rational-two-torsion-October-7-2026,
+  2026.
+\newblock Theorem~1.1.
+
+\bibitem{Pazuki2012}
+F.~Pazuki.
+\newblock Theta height and Faltings height.
+\newblock \emph{Bull. Soc. Math. France} 140 (2012), no.~1, 19--49.
+\newblock doi:10.24033/bsmf.2623.
+
+\bibitem{Poonen2009}
+B.~Poonen.
+\newblock Characterizing integers among rational numbers with a
+  universal-existential formula.
+\newblock \emph{Amer. J. Math.} 131 (2009), no.~3, 675--682.
+\newblock doi:10.1353/ajm.0.0057.
+
+\bibitem{PoonenRankOne2002}
+B.~Poonen.
+\newblock Using elliptic curves of rank one towards the undecidability of
+  Hilbert's tenth problem over rings of algebraic integers.
+\newblock In \emph{Algorithmic Number Theory (ANTS-V, Sydney, 2002)}, Lecture
+  Notes in Comput. Sci. 2369, Springer, 2002, 33--42.
+
+\bibitem{PoonenSubrings}
+B.~Poonen.
+\newblock Hilbert's tenth problem and Mazur's conjecture for large subrings
+  of $\mathbb Q$.
+\newblock \emph{J. Amer. Math. Soc.} 16 (2003), no.~4, 981--990.
+\newblock doi:10.1090/S0894-0347-03-00433-8.
+
+\bibitem{PoonenStoll1999}
+B.~Poonen and M.~Stoll.
+\newblock The Cassels--Tate pairing on polarized abelian varieties.
+\newblock \emph{Ann. of Math. (2)} 150 (1999), no.~3, 1109--1149.
+\newblock doi:10.2307/121064.
+
+\bibitem{Pyle1995}
+E.~E. Pyle.
+\newblock \emph{Abelian Varieties over $\mathbf Q$ with Large Endomorphism
+  Algebras and Their Simple Components over $\overline{\mathbf Q}$}.
+\newblock PhD thesis, University of California, Berkeley, 1995.
+
+\bibitem{Ribet1992}
+K.~A. Ribet.
+\newblock Abelian varieties over $\mathbf Q$ and modular forms.
+\newblock In \emph{Algebra and Topology 1992}, Korea Adv. Inst. Sci. Tech.,
+  Taejon, 1992, 53--79.
+
+\bibitem{Robinson1949}
+J.~Robinson.
+\newblock Definability and decision problems in arithmetic.
+\newblock \emph{J. Symbolic Logic} 14 (1949), no.~2, 98--114.
+\newblock doi:10.2307/2266510.
+
+\bibitem{Silverman2009}
+J.~H. Silverman.
+\newblock \emph{The Arithmetic of Elliptic Curves}, second edition.
+\newblock Graduate Texts in Mathematics 106, Springer, New York, 2009.
+\newblock doi:10.1007/978-0-387-09494-6.
+
+\bibitem{vonKaenel2021}
+R.~von K\"anel.
+\newblock The effective Shafarevich conjecture for abelian varieties of
+  $\mathrm{GL}_2$-type.
+\newblock \emph{Forum Math. Sigma} 9 (2021), e39, 1--29.
+\newblock doi:10.1017/fms.2021.29.
+
+\end{thebibliography}
+
+\end{document}
