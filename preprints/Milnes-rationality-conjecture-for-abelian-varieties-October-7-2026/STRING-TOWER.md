@@ -1,6 +1,6 @@
 # The string tower: local connectedness of p-adic shtuka spaces via tilted convolution
 
-**Idea:** proposed by [your name]. Build a non-minuscule µ as a tower of minuscule steps (a convolution, or "string"), push a good topological property down that tower, then up the level tower.
+**Idea:** proposed by Ryan Satterfield. Build a non-minuscule µ as a tower of minuscule steps (a convolution, or "string"), push a good topological property down that tower, then up the level tower.
 **Implementation and write-up:** with AI assistance (Claude). Six independent AI checks found no error: a review and two adversarial checks of the sketch, then two adversarial checks and a citation audit of this text. Their minor corrections are incorporated.
 **Status:** not refereed. The gaps are listed in §7.
 
