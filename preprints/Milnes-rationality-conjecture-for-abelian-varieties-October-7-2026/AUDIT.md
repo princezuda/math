@@ -142,7 +142,14 @@ Each holds at p = 2, but Kisin–Zhou cite only p > 2 sources for them:
   - The proof uses local connectedness of the finite-level rigid spaces Sht_K, and density of local monodromy, in place of quasi-compactness.
   - It repairs Prop. 3.12 for minuscule μ, which covers Hodge type and so everything 001 uses.
   - Non-minuscule μ stays open.
-- **So 001's chain had one link whose published proof has a gap:** 001 Cor. 3.4 → Kisin–Zhou Thm 2.2.7 → Thm 2.2.5 = GLX Cor. 6.3 → GLX Prop. 3.12. The gap is in a human-written source, four levels below 001. [GLX-STAR.md](GLX-STAR.md) closes it for minuscule μ, pending expert review.
+- **All μ, finite level, not yet refereed: [GLX-ALLMU.md](GLX-ALLMU.md).**
+  - It replaces π0(Sht_∞) by the pro-set Π = lim_K π0(Sht_K), and needs only that finite-level components are open. GLX's own Thms 3.7 and 3.9 give that for every μ.
+  - This proves Cor. 3.13, Cor. 6.3, Thm 6.2 = Thm 1.2, Prop. 5.11, and Thm 6.1 with (5) read for Π, all for every μ. Eight adversarial reviewers found no breaking error.
+  - A tilting version of the convolution ("string-tower") idea also gives (★), and hence the literal Prop. 3.12, when μ is a sum of dominant minuscule cocharacters. Gaps are listed in the note.
+  - The note also records two further gaps in GLX §6, both bypassed:
+    - Prop. 6.6(2) asserts an unconditional and false triviality of the G^sc-action, which affects Thm 6.1(c).
+    - Prop. 6.11 has an unproved Galois-limit injectivity.
+- **So 001's chain had one link whose published proof has a gap:** 001 Cor. 3.4 → Kisin–Zhou Thm 2.2.7 → Thm 2.2.5 (= GLX Cor. 6.3 + Pappas–Rapoport Thm 4.10.6/§4.10.3) → GLX Cor. 3.13 → GLX Prop. 3.12. 001 also cites GLX Cor. 6.3 directly, in `lem:admissible-realization`. The gap is in a human-written source, four levels below 001. [GLX-STAR.md](GLX-STAR.md) closes it for minuscule μ, and [GLX-ALLMU.md](GLX-ALLMU.md) closes it independently for every μ (Cor. 3.13 is the only GLX statement used), both pending expert review.
 - **GLX Thm 6.2 itself.**
   - §6 checks out. The one omission is that Lemma 6.13 needs G(ℚ_p)/N_x to be discrete; it is, since N_x ⊇ Z(G)(ℚ_p)·G^der_x, which is open. Lemma 6.13's finiteness input (Hamacher–Viehmann Thm 1.2) needs no condition on G.
   - §4: the reduction used for Thm 6.2 is valid. The (2)⇒(3) direction (Prop. 4.11), not used here, has a fixable gap. Def. 4.1 is missing the word "proper". (3.23) is misstated, but its conclusion is true for all G.
