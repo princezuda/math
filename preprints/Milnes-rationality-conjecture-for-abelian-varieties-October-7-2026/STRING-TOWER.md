@@ -1,7 +1,7 @@
 # The string tower: local connectedness of p-adic shtuka spaces via tilted convolution
 
-**Idea:** proposed by Ryan Satterfield. Build a non-minuscule µ as a tower of minuscule steps (a convolution, or "string"), push a good topological property down that tower, then up the level tower.
-**Implementation and write-up:** with AI assistance (Claude). Six independent AI checks found no error: a review and two adversarial checks of the sketch, then two adversarial checks and a citation audit of this text. Their minor corrections are incorporated.
+**Author:** Ryan Satterfield, with AI assistance. **Idea (Satterfield):** Build a non-minuscule µ as a tower of minuscule steps (a convolution, or "string"), push a good topological property down that tower, then up the level tower.
+**Proofs and write-up, including the appendices:** produced with AI (Claude). Six independent AI checks found no error: a review and two adversarial checks of the sketch, then two adversarial checks and a citation audit of this text. Their minor corrections are incorporated.
 **Status:** not refereed. The gaps are listed in §7.
 
 ## The result
@@ -131,8 +131,10 @@ Steps 1–5 of GLX-STAR then go through unchanged. This gives (★).
 
 ## References
 
-- [GLX] Gleason–Lim–Xu, *The connected components of affine Deligne–Lusztig varieties*, arXiv:2208.07195.
-- [SW20] Scholze–Weinstein, *Berkeley Lectures on p-adic Geometry*.
-- [Sch17] Scholze, *Étale cohomology of diamonds*.
-- Heuer, *G-torsors on perfectoid spaces*, arXiv:2207.07623.
+- [GLX] Gleason–Lim–Xu, *The connected components of affine Deligne–Lusztig varieties*, Invent. Math. 243 (2025). https://arxiv.org/abs/2208.07195
+- [SW20] Scholze–Weinstein, *Berkeley Lectures on p-adic Geometry*, Annals of Math. Studies 207, Princeton University Press, 2020.
+- [Sch17] Scholze, *Étale cohomology of diamonds*. https://arxiv.org/abs/1709.07343
+- Heuer, *G-torsors on perfectoid spaces*. https://arxiv.org/abs/2207.07623
+- [Gle22] Gleason, specialization maps for moduli of p-adic shtukas. https://arxiv.org/abs/2107.03579
+- [GL22] Gleason–Lourenço, *On the connectedness of p-adic period domains*. https://arxiv.org/abs/2210.08625
 - [GLX-STAR.md](GLX-STAR.md), [GLX-ALLMU.md](GLX-ALLMU.md) in this folder.
