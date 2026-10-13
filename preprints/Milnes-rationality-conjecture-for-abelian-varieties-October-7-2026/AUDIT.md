@@ -138,6 +138,7 @@ Each holds at p = 2, but Kisin–Zhou cite only p > 2 sources for them:
 - **No independent proof found.** Gleason's analogue, Gle22 v4 Lemma 3.11(1), is proved only for unramified G with (b, μ) HN-irreducible. It assumes (★), and it uses the known bijection π0(X_μ(b)) ≅ π0(X^ab), which is what GLX set out to prove in general.
 - **Effect on Prop. 3.12.** Its written proof (transitivity of G(ℚ_p) on π0(Sht_∞ × C_p)) uses exactly this step, so as written it is invalid.
 - **The statement is very likely true.** A repair: components of Sht_K × C_p are open (Thm 3.9, with X_μ^K(b) locally noetherian), then use GL22 connectedness. The repair still needs one step (★): for a compact open K, the fibres of π0(Sht_∞) → π0(Sht_K) are K-orbits. Gleason states (★) as Gle22 v4 Lemma 3.11(1) without proof. It is routine when the components are quasi-compact.
+- **Author response (Oct 2026).** One of the authors confirmed the issue. He reports a different, more elegant fix, to appear in an erratum. This is a private communication to R. Satterfield. Once the erratum is public, it supersedes the repairs below.
 - **(★) proved for minuscule μ, not yet refereed: [GLX-STAR.md](GLX-STAR.md).**
   - The proof uses local connectedness of the finite-level rigid spaces Sht_K, and density of local monodromy, in place of quasi-compactness.
   - It repairs Prop. 3.12 for minuscule μ, which covers Hodge type and so everything 001 uses.
